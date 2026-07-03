@@ -48,13 +48,13 @@ export function TypeBadge({
       data-slot="type-badge"
       data-kind={kind}
       className={cn(
-        "inline-flex items-center gap-1.5 shrink-0 px-2.5 py-1.5 rounded-full text-xs font-semibold leading-none border",
+        "inline-flex h-7 items-center gap-1.5 shrink-0 px-3 rounded-full text-xs font-semibold leading-none border",
         classes,
         className
       )}
       {...props}
     >
-      <Icon className="h-3 w-3" />
+      <Icon className="h-3.5 w-3.5" />
       {showLabel && label}
     </span>
   )

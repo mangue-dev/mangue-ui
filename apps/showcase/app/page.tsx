@@ -26,7 +26,7 @@ import {
   AppShell,
   Sidebar,
   Header,
-  HeaderSearch,
+  SearchCommand,
   MobileNav,
   CommandMenu,
   useCommandMenu,
@@ -164,7 +164,7 @@ export default function Home() {
               <span className="font-medium text-foreground">{activeLabel}</span>
             </nav>
           }
-          center={<HeaderSearch onClick={() => setOpen(true)} placeholder="Search or jump to..." />}
+          center={<SearchCommand groups={commandGroups} placeholder="Search or jump to..." />}
           right={
             <>
               <Button variant="ghost" size="icon-sm" aria-label="Toggle theme" onClick={toggleTheme}>
@@ -192,7 +192,7 @@ export default function Home() {
           <div className="relative h-full">
             <Button
               variant="ghost"
-              size="icon-xs"
+              size="icon-sm"
               className="absolute -top-2 -right-2 z-10 rounded-full bg-card shadow"
               aria-label="Close assistant"
               onClick={() => setChatOpen(false)}
@@ -219,9 +219,9 @@ function Brand() {
   return (
     <div className="flex items-center gap-2">
       <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-        <span className="font-display text-sm font-bold">m</span>
+        <span className="text-sm font-bold">m</span>
       </div>
-      <span className="font-display text-[15px] font-semibold tracking-tight">mangue-ui</span>
+      <span className="text-[15px] font-semibold tracking-tight">mangue-ui</span>
     </div>
   );
 }
@@ -260,7 +260,7 @@ function UserMenu() {
 
 function CountBadge({ value }: { value: number }) {
   return (
-    <Badge variant="secondary" className="h-5 min-w-5 justify-center px-1.5 text-[11px]">
+    <Badge variant="secondary" className="min-w-7 justify-center px-1.5">
       {value}
     </Badge>
   );

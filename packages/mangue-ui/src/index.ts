@@ -11,6 +11,7 @@
 // ── Utilities ──────────────────────────────────────────────────────────────
 export { cn } from "./lib/utils";
 export * from "./lib/motion";
+export * from "./lib/command-filter";
 export * from "./lib/hooks/use-mobile";
 
 // ── Theme ──────────────────────────────────────────────────────────────────
@@ -52,10 +53,12 @@ export * from "./components/ui/select";
 export * from "./components/ui/send-button-with-cost";
 export * from "./components/ui/separator";
 export * from "./components/ui/sheet";
+export * from "./components/ui/side-panel";
 export * from "./components/ui/skeleton";
 export * from "./components/ui/slider";
 export * from "./components/ui/sonner";
 export * from "./components/ui/spinner";
+export * from "./components/ui/split-button";
 export * from "./components/ui/status-chip";
 export * from "./components/ui/switch";
 export * from "./components/ui/tabs";
@@ -69,6 +72,7 @@ export * from "./components/shell/types";
 export * from "./components/shell/sidebar";
 export * from "./components/shell/header";
 export * from "./components/shell/command-menu";
+export * from "./components/shell/search-command";
 export * from "./components/shell/mobile-nav";
 export * from "./components/shell/app-shell";
 

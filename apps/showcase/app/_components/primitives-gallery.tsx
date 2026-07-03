@@ -103,9 +103,19 @@ import {
   SelectTrigger,
   SelectValue,
   Separator,
+  SidePanel,
+  SidePanelBody,
+  SidePanelClose,
+  SidePanelContent,
+  SidePanelDescription,
+  SidePanelFooter,
+  SidePanelHeader,
+  SidePanelTitle,
+  SidePanelTrigger,
   Skeleton,
   Slider,
   Spinner,
+  SplitButton,
   StatusChip,
   Switch,
   Tabs,
@@ -134,7 +144,7 @@ function Section({ title, description, children }: SectionProps) {
   return (
     <section className="space-y-4 scroll-mt-8">
       <div className="space-y-1">
-        <h2 className="font-display text-lg font-semibold tracking-tight text-foreground">
+        <h2 className="text-lg font-semibold tracking-tight text-foreground">
           {title}
         </h2>
         <p className="text-sm text-muted-foreground">{description}</p>
@@ -186,14 +196,12 @@ function Panel({ children }: { children: React.ReactNode }) {
 const BUTTON_VARIANTS = [
   "default",
   "outline",
-  "secondary",
   "ghost",
   "destructive",
   "link",
 ] as const;
 
 const BUTTON_SIZES = [
-  "xs",
   "sm",
   "default",
   "lg",
@@ -204,8 +212,6 @@ const BADGE_VARIANTS = [
   "secondary",
   "destructive",
   "outline",
-  "ghost",
-  "link",
 ] as const;
 
 const STATUS_TONES: { tone: StatusChipTone; label: string }[] = [
@@ -264,10 +270,10 @@ export function PrimitivesGallery() {
       {/* Intro ------------------------------------------------------- */}
       <header className="space-y-3">
         <div className="flex items-center gap-2">
-          <Badge variant="secondary" className="gap-1">
-            <Sparkles /> mangue-ui
+          <Badge variant="secondary" icon={<Sparkles />}>
+            mangue-ui
           </Badge>
-          <StatusChip tone="success" size="sm" icon={<Check />}>
+          <StatusChip tone="success" icon={<Check />}>
             Live
           </StatusChip>
         </div>
@@ -284,7 +290,7 @@ export function PrimitivesGallery() {
       {/* Buttons ----------------------------------------------------- */}
       <Section
         title="Buttons"
-        description="Six visual variants and the full size scale, including icon-only shapes."
+        description="Five visual variants and the full size scale, including icon-only shapes."
       >
         <Panel>
           <div className="space-y-6">
@@ -309,13 +315,13 @@ export function PrimitivesGallery() {
             <Separator />
 
             <Row label="Icon buttons">
-              <Button size="icon-xs" aria-label="Add">
+              <Button size="icon-sm" aria-label="Add">
                 <Plus />
               </Button>
               <Button size="icon-sm" variant="outline" aria-label="Settings">
                 <Settings />
               </Button>
-              <Button size="icon" variant="secondary" aria-label="Search">
+              <Button size="icon" variant="outline" aria-label="Search">
                 <Search />
               </Button>
               <Button size="icon-lg" variant="ghost" aria-label="Notifications">
@@ -332,7 +338,7 @@ export function PrimitivesGallery() {
               <Button variant="outline">
                 <Github /> Continue with GitHub
               </Button>
-              <Button variant="secondary">
+              <Button variant="outline">
                 <Copy /> Duplicate
               </Button>
               <Button variant="destructive">
@@ -345,6 +351,47 @@ export function PrimitivesGallery() {
                 <Spinner /> Saving…
               </Button>
             </Row>
+
+            <Separator />
+
+            <Row label="Split buttons">
+              <SplitButton
+                onClick={() => {}}
+                menu={
+                  <>
+                    <DropdownMenuItem>
+                      <Sparkles /> From template
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Copy /> Duplicate existing
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <Github /> Import from GitHub
+                    </DropdownMenuItem>
+                  </>
+                }
+              >
+                <Plus /> New project
+              </SplitButton>
+              <SplitButton
+                variant="outline"
+                size="sm"
+                onClick={() => {}}
+                menu={
+                  <>
+                    <DropdownMenuItem>
+                      <Check /> Save and close
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Copy /> Save as copy
+                    </DropdownMenuItem>
+                  </>
+                }
+              >
+                <Check /> Save
+              </SplitButton>
+            </Row>
           </div>
         </Panel>
       </Section>
@@ -356,30 +403,26 @@ export function PrimitivesGallery() {
       >
         <Panel>
           <div className="space-y-6">
-            <Row label="Badge variants">
+            <Row label="Badge variants — no icon">
               {BADGE_VARIANTS.map((variant) => (
                 <Badge key={variant} variant={variant}>
                   {variant}
                 </Badge>
               ))}
-              <Badge variant="secondary">
-                <Star /> Featured
-              </Badge>
+            </Row>
+
+            <Row label="Badge variants — with icon">
+              <Badge icon={<Star />}>Featured</Badge>
+              <Badge variant="secondary" icon={<Check />}>Verified</Badge>
+              <Badge variant="destructive" icon={<Trash2 />}>Deprecated</Badge>
+              <Badge variant="outline" icon={<Circle />}>Draft</Badge>
             </Row>
 
             <Separator />
 
-            <Row label="Status chips — default">
+            <Row label="Status chips">
               {STATUS_TONES.map(({ tone, label }) => (
                 <StatusChip key={tone} tone={tone} icon={<Circle />}>
-                  {label}
-                </StatusChip>
-              ))}
-            </Row>
-
-            <Row label="Status chips — small">
-              {STATUS_TONES.map(({ tone, label }) => (
-                <StatusChip key={tone} tone={tone} size="sm">
                   {label}
                 </StatusChip>
               ))}
@@ -669,6 +712,53 @@ export function PrimitivesGallery() {
               </AlertDialogContent>
             </AlertDialog>
 
+            {/* Side panel — slides in from the right, becomes a bottom sheet on mobile */}
+            <SidePanel>
+              <SidePanelTrigger asChild>
+                <Button variant="outline">
+                  <Settings /> Open panel
+                </Button>
+              </SidePanelTrigger>
+              <SidePanelContent>
+                <SidePanelHeader>
+                  <SidePanelTitle>Project settings</SidePanelTitle>
+                  <SidePanelDescription>
+                    Slides in from the edge on desktop, becomes a bottom sheet
+                    below 480px.
+                  </SidePanelDescription>
+                </SidePanelHeader>
+                <SidePanelBody className="space-y-4">
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-medium" htmlFor="panel-name">
+                      Project name
+                    </label>
+                    <Input id="panel-name" defaultValue="mangue-ui" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-medium" htmlFor="panel-desc">
+                      Description
+                    </label>
+                    <Textarea
+                      id="panel-desc"
+                      placeholder="What is this project about?"
+                    />
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    The body scrolls on its own while the header and footer stay
+                    pinned.
+                  </p>
+                </SidePanelBody>
+                <SidePanelFooter>
+                  <SidePanelClose asChild>
+                    <Button variant="ghost">Cancel</Button>
+                  </SidePanelClose>
+                  <SidePanelClose asChild>
+                    <Button>Save changes</Button>
+                  </SidePanelClose>
+                </SidePanelFooter>
+              </SidePanelContent>
+            </SidePanel>
+
             {/* Dropdown menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -773,7 +863,7 @@ export function PrimitivesGallery() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-baseline gap-1">
-                <span className="font-display text-3xl font-semibold">$24</span>
+                <span className="text-3xl font-semibold">$24</span>
                 <span className="text-sm text-muted-foreground">/ month</span>
               </div>
               <ul className="space-y-1.5 text-sm text-muted-foreground">
