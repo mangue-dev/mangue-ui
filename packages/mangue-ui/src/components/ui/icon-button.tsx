@@ -5,10 +5,9 @@ import { Button } from "./button"
 type ButtonProps = React.ComponentProps<typeof Button>
 type ButtonVariant = ButtonProps["variant"]
 
-export type IconButtonSize = "xs" | "sm" | "default" | "lg"
+export type IconButtonSize = "sm" | "default" | "lg"
 
 const SIZE_MAP: Record<IconButtonSize, NonNullable<ButtonProps["size"]>> = {
-  xs: "icon-xs",
   sm: "icon-sm",
   default: "icon",
   lg: "icon-lg",

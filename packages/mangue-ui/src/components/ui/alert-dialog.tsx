@@ -80,10 +80,11 @@ function AlertDialogContent({
         data-slot="alert-dialog-content"
         data-size={size}
         className={cn(
-          "group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid w-full max-h-[calc(100dvh-2rem)] overflow-y-auto -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-card p-4 ring-1 ring-foreground/10 duration-100 outline-none data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          "group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid w-full max-h-[calc(100dvh-2rem)] overflow-y-auto -translate-x-1/2 -translate-y-1/2 gap-4 rounded-[2rem] bg-card p-6 ring-1 ring-foreground/10 duration-100 outline-none data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
           // Bottom sheet below 480px: dock to the bottom edge, full width,
-          // rounded top, slide up/down instead of zoom-from-center.
-          "max-[479px]:inset-x-0 max-[479px]:bottom-0 max-[479px]:top-auto max-[479px]:left-0 max-[479px]:max-h-[92dvh] max-[479px]:!w-full max-[479px]:!max-w-none max-[479px]:translate-x-0 max-[479px]:translate-y-0 max-[479px]:rounded-b-none max-[479px]:rounded-t-2xl max-[479px]:data-open:zoom-in-100 max-[479px]:data-closed:zoom-out-100 max-[479px]:data-open:slide-in-from-bottom-6 max-[479px]:data-closed:slide-out-to-bottom-6",
+          // rounded top, slide up/down instead of zoom-from-center. Padding stays
+          // p-4 on the sheet (the desktop modal is the more spacious one).
+          "max-[479px]:inset-x-0 max-[479px]:bottom-0 max-[479px]:top-auto max-[479px]:left-0 max-[479px]:max-h-[92dvh] max-[479px]:!w-full max-[479px]:!max-w-none max-[479px]:translate-x-0 max-[479px]:translate-y-0 max-[479px]:rounded-b-none max-[479px]:rounded-t-2xl max-[479px]:p-4 max-[479px]:pb-[max(1rem,env(safe-area-inset-bottom))] max-[479px]:data-open:zoom-in-100 max-[479px]:data-closed:zoom-out-100 max-[479px]:data-open:slide-in-from-bottom-6 max-[479px]:data-closed:slide-out-to-bottom-6",
           className
         )}
         {...props}
@@ -116,7 +117,7 @@ function AlertDialogFooter({
     <div
       data-slot="alert-dialog-footer"
       className={cn(
-        "-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 group-data-[size=sm]/alert-dialog-content:grid group-data-[size=sm]/alert-dialog-content:grid-cols-2 sm:flex-row sm:justify-end max-[479px]:rounded-b-none max-[479px]:pb-[max(1rem,env(safe-area-inset-bottom))]",
+        "flex flex-col-reverse gap-2 group-data-[size=sm]/alert-dialog-content:grid group-data-[size=sm]/alert-dialog-content:grid-cols-2 sm:flex-row sm:justify-end",
         className
       )}
       {...props}

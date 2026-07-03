@@ -20,11 +20,20 @@ export function MobileNav({ items, activeKey, linkComponent: Link, className }: 
   return (
     <nav
       className={cn(
-        "fixed inset-x-0 bottom-0 z-40 flex justify-center pb-[env(safe-area-inset-bottom)] desktop:hidden",
+        // The wrapper spans the full width but must NOT capture pointer events —
+        // otherwise its transparent sides block clicks on the content behind it.
+        // Only the pill itself stays interactive (pointer-events-auto).
+        "pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-center pb-[env(safe-area-inset-bottom)] desktop:hidden",
         className,
       )}
     >
-      <div className="mb-3 flex items-center gap-1 rounded-full border border-border bg-surface-glass px-1.5 py-1.5 shadow-lg backdrop-blur-md">
+      {/* Fade the content scrolling beneath the floating pill into the
+          background instead of cutting it off sharply. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-t from-background via-background/80 to-background/0"
+      />
+      <div className="pointer-events-auto mb-3 flex items-center gap-1 rounded-full border border-border bg-surface-glass px-1.5 py-1.5 shadow-lg backdrop-blur-md">
         {items.map((item) => {
           const active = item.active ?? item.key === activeKey;
           const Icon = item.icon;

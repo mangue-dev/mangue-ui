@@ -3,7 +3,6 @@ import * as React from "react"
 import { cn } from "../../lib/utils"
 
 export type StatusChipTone = "neutral" | "info" | "success" | "warning" | "danger"
-export type StatusChipSize = "sm" | "default"
 
 const TONE_CLASSES: Record<StatusChipTone, string> = {
   neutral: "bg-muted text-muted-foreground border-border",
@@ -16,20 +15,13 @@ const TONE_CLASSES: Record<StatusChipTone, string> = {
     "bg-destructive/10 text-destructive border-destructive/20 dark:bg-destructive/15",
 }
 
-const SIZE_CLASSES: Record<StatusChipSize, string> = {
-  sm: "h-6 px-2.5 text-2xs gap-1 [&_svg]:size-3",
-  default: "h-7 px-3 text-xs gap-1.5 [&_svg]:size-3.5",
-}
-
 export interface StatusChipProps extends React.ComponentProps<"span"> {
   tone?: StatusChipTone
-  size?: StatusChipSize
   icon?: React.ReactNode
 }
 
 export function StatusChip({
   tone = "neutral",
-  size = "default",
   icon,
   className,
   children,
@@ -39,10 +31,8 @@ export function StatusChip({
     <span
       data-slot="status-chip"
       data-tone={tone}
-      data-size={size}
       className={cn(
-        "inline-flex shrink-0 items-center rounded-full border font-medium whitespace-nowrap leading-none [&_svg]:shrink-0",
-        SIZE_CLASSES[size],
+        "inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full border px-3 text-xs font-medium whitespace-nowrap leading-none [&_svg]:size-3.5 [&_svg]:shrink-0",
         TONE_CLASSES[tone],
         className
       )}

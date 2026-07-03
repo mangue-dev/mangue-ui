@@ -22,6 +22,71 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ── State variants ──────────────────────────────────────────────────────────
+   Restored from the shadcn base (lost on extraction). They map short names to
+   the data attributes Radix/cmdk actually emit, so utilities like
+   `data-horizontal:h-1`, `data-active:shadow-sm` or `data-selected:bg-muted`
+   target the right element instead of matching every node (or none). */
+@custom-variant data-open {
+  &:where([data-state="open"]),
+  &:where([data-open]:not([data-open="false"])) {
+    @slot;
+  }
+}
+@custom-variant data-closed {
+  &:where([data-state="closed"]),
+  &:where([data-closed]:not([data-closed="false"])) {
+    @slot;
+  }
+}
+@custom-variant data-checked {
+  &:where([data-state="checked"]),
+  &:where([data-checked]:not([data-checked="false"])) {
+    @slot;
+  }
+}
+@custom-variant data-unchecked {
+  &:where([data-state="unchecked"]),
+  &:where([data-unchecked]:not([data-unchecked="false"])) {
+    @slot;
+  }
+}
+@custom-variant data-selected {
+  &:where([data-selected="true"]) {
+    @slot;
+  }
+}
+@custom-variant data-disabled {
+  &:where([data-disabled="true"]),
+  &:where([data-disabled]:not([data-disabled="false"])) {
+    @slot;
+  }
+}
+@custom-variant data-active {
+  &:where([data-state="active"]),
+  &:where([data-active]:not([data-active="false"])) {
+    @slot;
+  }
+}
+@custom-variant data-horizontal {
+  &:where([data-orientation="horizontal"]) {
+    @slot;
+  }
+}
+@custom-variant data-vertical {
+  &:where([data-orientation="vertical"]) {
+    @slot;
+  }
+}
+
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -172,6 +237,11 @@
   /* Brand — derived from primary by default */
   --brand: oklch(0.62 0.22 265);
   --brand-foreground: oklch(1 0 0);
+
+  /* Ultrawide canvas — backdrop behind the centered app shell on ≥3xl screens */
+  --canvas: oklch(0.945 0.025 266);
+  --canvas-glow-1: oklch(0.80 0.12 250 / 0.55);
+  --canvas-glow-2: oklch(0.78 0.11 300 / 0.45);
 }
 
 .dark {
@@ -230,6 +300,11 @@
   /* Brand dark */
   --brand: oklch(0.58 0.22 265);
   --brand-foreground: oklch(1 0 0);
+
+  /* Ultrawide canvas dark */
+  --canvas: oklch(0.060 0.003 250);
+  --canvas-glow-1: oklch(0.28 0.10 265 / 0.30);
+  --canvas-glow-2: oklch(0.20 0.06 265 / 0.25);
 }
 
 html,
@@ -379,4 +454,32 @@ code,
 }
 .color-input-picker .react-colorful__interactive:focus .react-colorful__pointer {
   transform: translate(-50%, -50%) scale(1.15);
+}
+
+/* ── Ultrawide canvas ─────────────────────────────────────────────────────────
+   On ≥3xl screens the <AppShell> becomes a centered card (via its `3xl:*` classes
+   and the body flex/height it applies). This paints the aurora backdrop revealed
+   around the card, and re-anchors floating panels to the app zone edges. */
+.ultrawide-canvas {
+  background-color: var(--canvas);
+  background-image:
+    radial-gradient(ellipse 70% 55% at 12% 18%, var(--canvas-glow-1), transparent 62%),
+    radial-gradient(ellipse 75% 55% at 88% 82%, var(--canvas-glow-2), transparent 62%);
+  background-attachment: fixed;
+}
+
+@layer utilities {
+  /* The floating <SidePanel> is fixed to the viewport. On ultrawide the app is a
+     centered card, so re-anchor the panel to the app-zone edges (+12px) instead
+     of the viewport — top AND bottom, so it never exceeds the app height. */
+  .ultrawide-canvas [data-slot="side-panel-content"][data-side="right"] {
+    right: calc((100dvw - var(--spacing-app-max-w)) / 2 + 12px) !important;
+    top: calc(max(0px, (100dvh - var(--spacing-app-max-h)) / 2) + 12px) !important;
+    bottom: calc(max(0px, (100dvh - var(--spacing-app-max-h)) / 2) + 12px) !important;
+  }
+  .ultrawide-canvas [data-slot="side-panel-content"][data-side="left"] {
+    left: calc((100dvw - var(--spacing-app-max-w)) / 2 + 12px) !important;
+    top: calc(max(0px, (100dvh - var(--spacing-app-max-h)) / 2) + 12px) !important;
+    bottom: calc(max(0px, (100dvh - var(--spacing-app-max-h)) / 2) + 12px) !important;
+  }
 }
