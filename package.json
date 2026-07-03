@@ -1,0 +1,17 @@
+{
+  "name": "mangue-ui-monorepo",
+  "private": true,
+  "version": "0.0.0",
+  "description": "mangue-ui — a reusable component library (design tokens + shadcn primitives + decoupled app shell) with a live showcase app.",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace apps/showcase",
+    "build": "npm run build --workspace apps/showcase",
+    "start": "npm run start --workspace apps/showcase",
+    "lint": "npm run lint --workspace apps/showcase",
+    "typecheck": "npm run typecheck --workspace packages/mangue-ui"
+  }
+}
