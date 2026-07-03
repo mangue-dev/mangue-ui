@@ -38,3 +38,17 @@ export interface NavSection {
   label?: string;
   items: NavItem[];
 }
+
+/**
+ * One step in the header breadcrumb. The last level is the current page; on
+ * mobile (<desktop) the header collapses to a back button pointing at the
+ * previous level plus the current level centred.
+ */
+export interface BreadcrumbLevel {
+  key: string;
+  label: string;
+  icon?: IconType;
+  /** Navigate here when clicked (used by the mobile back button too). */
+  href?: string;
+  onClick?: () => void;
+}

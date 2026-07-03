@@ -77,13 +77,6 @@ const NAV_SECTIONS: NavSection[] = [
   },
 ];
 
-const MOBILE_ITEMS: NavItem[] = [
-  { key: "inbox", label: "Inbox", icon: Inbox, href: "#inbox" },
-  { key: "my-issues", label: "Issues", icon: CircleDot, href: "#my-issues" },
-  { key: "views", label: "Views", icon: LayoutGrid, href: "#views" },
-  { key: "settings", label: "Settings", icon: Settings, href: "#settings" },
-];
-
 export default function Home() {
   const { open, setOpen } = useCommandMenu();
   const { resolvedTheme, toggleTheme } = useTheme();
@@ -141,8 +134,8 @@ export default function Home() {
     },
   ];
 
-  const activeLabel =
-    NAV_SECTIONS.flatMap((s) => s.items).find((i) => i.key === activeKey)?.label ?? "Inbox";
+  const activeItem = NAV_SECTIONS.flatMap((s) => s.items).find((i) => i.key === activeKey);
+  const activeLabel = activeItem?.label ?? "Inbox";
 
   return (
     <AppShell
@@ -157,16 +150,14 @@ export default function Home() {
       }
       header={
         <Header
-          left={
-            <nav className="flex items-center gap-1.5 text-sm">
-              <span className="text-muted-foreground">Workspace</span>
-              <span className="text-muted-foreground/50">/</span>
-              <span className="font-medium text-foreground">{activeLabel}</span>
-            </nav>
-          }
-          center={<SearchCommand groups={commandGroups} placeholder="Search or jump to..." />}
+          linkComponent={Link}
+          breadcrumb={[
+            { key: "workspace", label: "Workspace", onClick: () => setActiveKey("inbox") },
+            { key: activeKey, label: activeLabel, icon: activeItem?.icon },
+          ]}
           right={
             <>
+              <SearchCommand groups={commandGroups} placeholder="Search or jump to..." />
               <Button variant="ghost" size="icon-sm" aria-label="Toggle theme" onClick={toggleTheme}>
                 {resolvedTheme === "dark" ? <Sun /> : <Moon />}
               </Button>
@@ -180,7 +171,17 @@ export default function Home() {
           }
         />
       }
-      mobileNav={<MobileNav items={MOBILE_ITEMS} activeKey={activeKey} linkComponent={Link} />}
+      mobileNav={
+        <MobileNav
+          sections={NAV_SECTIONS}
+          commandGroups={commandGroups}
+          activeKey={activeKey}
+          linkComponent={Link}
+          menuHeader={<Brand />}
+          menuFooter={<UserMenu />}
+          searchPlaceholder="Search or jump to..."
+        />
+      }
     >
       <PrimitivesGallery />
 
