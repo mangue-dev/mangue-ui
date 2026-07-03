@@ -1,0 +1,382 @@
+/* ============================================================================
+   mangue-ui — design tokens
+   Extracted from AutoKap's design system (radix-nova style, OKLch color space).
+
+   ── How to consume ─────────────────────────────────────────────────────────
+   In your app's CSS entry, AFTER `@import "tailwindcss";`:
+
+       @import "mangue-ui/tokens.css";
+       @source "../node_modules/mangue-ui/src";   // let Tailwind scan the lib
+
+   Fonts (--font-inter, --font-space-grotesk, --font-instrument-serif) are
+   provided by the host app (e.g. next/font). If absent, the browser default
+   sans-serif is used.
+
+   ── How to REBRAND ─────────────────────────────────────────────────────────
+   Change the two `--primary` lines (one in :root, one in .dark) and the whole
+   library recolors: buttons, rings, focus states, accents, brand, charts all
+   derive from it. Optionally tune --brand / --accent-glow to match.
+   ============================================================================ */
+
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-inter);
+  --font-serif: var(--font-instrument-serif);
+  --font-display: var(--font-space-grotesk);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Semantic color mappings */
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-glass: var(--surface-glass);
+  --color-border-subtle: var(--border-subtle);
+  --color-accent-glow: var(--accent-glow);
+  --color-accent-glow-foreground: var(--accent-glow-foreground);
+  --color-accent-glow-muted: var(--accent-glow-muted);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-strong: var(--warning-strong);
+  --color-text-tertiary: var(--text-tertiary);
+
+  /* Brand accent — identity color (badges, indicators). Derived from primary. */
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+
+  /* Typography scale extensions (UI coherence tokens) */
+  --text-2xs: 10px;
+  --text-3xs: 11px;
+  --text-md: 13px;
+
+  /* Layout spacing */
+  --spacing-header: 60px;
+  --spacing-sidebar: 256px;
+  --spacing-sidebar-sm: 56px;
+
+  /* Component sizing */
+  --spacing-icon: 16px;
+  --spacing-icon-sm: 14px;
+  --spacing-favicon: 20px;
+  --radius-favicon: 4px;
+
+  /* App shell max size (ultrawide monitors) */
+  --spacing-app-max-w: 1800px;
+  --spacing-app-max-h: 1100px;
+  --breakpoint-3xl: 2200px;
+
+  /* Mobile-adaptation threshold: the app UI is wide and starts breaking below
+     1200px. `desktop:` = >=1200px (wide UI), `max-desktop:` = <1200px (mobile
+     adaptations). Canonical breakpoint for all mobile work. */
+  --breakpoint-desktop: 1200px;
+}
+
+:root {
+  /* Dialog max size — 90% of app shell on ultrawide, 90% of viewport below. */
+  --spacing-dialog-w: min(90vw, calc(var(--spacing-app-max-w) * 0.9));
+  --spacing-dialog-h: min(90vh, calc(var(--spacing-app-max-h) * 0.9));
+
+  --radius: 1rem;
+  --background: oklch(0.975 0.006 266);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(0.995 0.002 266);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(0.995 0.002 266);
+  --popover-foreground: oklch(0.145 0 0);
+
+  /* ▼▼▼ REBRAND: change this single line to recolor the whole library ▼▼▼ */
+  --primary: oklch(0.62 0.22 265);
+  /* ▲▲▲ ------------------------------------------------------------- ▲▲▲ */
+  --primary-foreground: oklch(0.985 0 0);
+
+  --secondary: oklch(0.920 0.020 268);
+  --secondary-foreground: oklch(0.256 0.102 268);
+  --muted: oklch(0.935 0.008 268);
+  --muted-foreground: oklch(0.500 0.010 266);
+  --accent: oklch(0.945 0.010 268);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.58 0.22 27);
+  --border: oklch(0.895 0.012 268);
+  --input: oklch(0.910 0.012 268);
+  --ring: oklch(0.62 0.22 265);
+  --chart-1: oklch(0.85 0.12 266);
+  --chart-2: oklch(0.754 0.120 270);
+  --chart-3: oklch(0.65 0.15 266);
+  --chart-4: oklch(0.498 0.282 266);
+  --chart-5: oklch(0.45 0.12 266);
+  --sidebar: oklch(0.975 0.006 266);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.62 0.22 265);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.940 0.012 268);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.900 0.012 268);
+  --sidebar-ring: oklch(0.676 0.060 270);
+
+  /* Semantic tokens */
+  --surface-raised: oklch(0.995 0.002 266);
+  --surface-sunken: oklch(0.940 0.008 268);
+  --surface-glass: oklch(0.965 0.006 268 / 60%);
+  --border-subtle: oklch(0.910 0.010 268);
+  --accent-glow: oklch(0.62 0.22 265);
+  --accent-glow-foreground: oklch(1 0 0);
+  --accent-glow-muted: oklch(0.62 0.22 265 / 10%);
+  --success: oklch(0.68 0.16 155);
+  --success-foreground: oklch(1 0 0);
+  --warning: oklch(0.78 0.14 75);
+  --warning-foreground: oklch(0.25 0 0);
+  --warning-strong: oklch(0.53 0.17 52);
+  --text-tertiary: oklch(0.500 0.010 266);
+
+  /* Brand — derived from primary by default */
+  --brand: oklch(0.62 0.22 265);
+  --brand-foreground: oklch(1 0 0);
+}
+
+.dark {
+  /* Linear-style dark — true black/gray with an imperceptible cool cast. */
+  --background: oklch(0.135 0.003 250);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.170 0.003 250);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.170 0.003 250);
+  --popover-foreground: oklch(0.985 0 0);
+
+  /* ▼▼▼ REBRAND (dark): match the light --primary hue/chroma ▼▼▼ */
+  --primary: oklch(0.64 0.22 265);
+  /* ▲▲▲ ------------------------------------------------------ ▲▲▲ */
+  --primary-foreground: oklch(0.985 0 0);
+
+  --secondary: oklch(0.220 0.003 250);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.200 0.003 250);
+  --muted-foreground: oklch(0.620 0.003 250);
+  --accent: oklch(0.230 0.003 250);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 8%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.58 0.22 265);
+  --chart-1: oklch(0.85 0 0);
+  --chart-2: oklch(0.70 0 0);
+  --chart-3: oklch(0.55 0 0);
+  --chart-4: oklch(0.65 0.18 265);
+  --chart-5: oklch(0.40 0 0);
+  --sidebar: oklch(0.110 0.003 250);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.64 0.22 265);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.200 0.003 250);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 6%);
+  --sidebar-ring: oklch(0.555 0 0);
+
+  /* Semantic tokens dark */
+  --surface-raised: oklch(0.170 0.003 250);
+  --surface-sunken: oklch(0.090 0.003 250);
+  --surface-glass: oklch(0.170 0.003 250 / 60%);
+  --border-subtle: oklch(1 0 0 / 5%);
+  --accent-glow: oklch(0.58 0.22 265);
+  --accent-glow-foreground: oklch(1 0 0);
+  --accent-glow-muted: oklch(0.58 0.22 265 / 12%);
+  --success: oklch(0.72 0.16 155);
+  --success-foreground: oklch(0.95 0 0);
+  --warning: oklch(0.82 0.14 75);
+  --warning-foreground: oklch(0.95 0 0);
+  --warning-strong: oklch(0.82 0.14 75);
+  --text-tertiary: oklch(0.555 0 0);
+
+  /* Brand dark */
+  --brand: oklch(0.58 0.22 265);
+  --brand-foreground: oklch(1 0 0);
+}
+
+html,
+body {
+  font-family:
+    var(--font-inter),
+    ui-sans-serif,
+    system-ui,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    "Noto Color Emoji";
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Keyframes used by primitives (skeleton shimmer, accordion, collapsible) */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@keyframes accordion-down {
+  from { height: 0; opacity: 0; }
+  to { height: var(--radix-accordion-content-height); opacity: 1; }
+}
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); opacity: 1; }
+  to { height: 0; opacity: 0; }
+}
+@keyframes collapsible-down {
+  from { height: 0; opacity: 0; }
+  to { height: var(--radix-collapsible-content-height); opacity: 1; }
+}
+@keyframes collapsible-up {
+  from { height: var(--radix-collapsible-content-height); opacity: 1; }
+  to { height: 0; opacity: 0; }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Card hover-lift — subtle rise + shadow on pointer devices only. */
+.lift {
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+@media (hover: hover) {
+  .lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.28);
+  }
+}
+
+/* Touch-target expansion (48px min) for coarse pointers */
+@media (pointer: coarse) {
+  [data-slot="button"],
+  [data-slot="select-trigger"],
+  [data-slot="dialog-close"] {
+    position: relative;
+  }
+  [data-slot="button"]::after,
+  [data-slot="select-trigger"]::after,
+  [data-slot="dialog-close"]::after {
+    content: "";
+    position: absolute;
+    top: min(0px, calc((48px - 100%) / -2));
+    bottom: min(0px, calc((48px - 100%) / -2));
+    left: min(0px, calc((48px - 100%) / -2));
+    right: min(0px, calc((48px - 100%) / -2));
+  }
+}
+
+/* Reduced motion — kill CSS animations globally */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Global user-select: none (outside @layer for higher priority) */
+*:not(input):not(textarea):not([contenteditable="true"]):not(pre):not(code) {
+  user-select: none;
+}
+input,
+textarea,
+[contenteditable="true"],
+pre,
+code,
+.select-text {
+  user-select: text;
+}
+
+/* iOS Safari zooms a focused control whose font-size < 16px. Enforce 16px floor
+   on small screens. Excludes checkbox/radio/buttons. */
+@media (max-width: 767px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="button"]):not([type="submit"]),
+  textarea,
+  select,
+  [contenteditable="true"] {
+    font-size: 16px;
+  }
+}
+
+/* react-colorful — match the radix-nova look (rounded, soft shadows). */
+.color-input-picker .react-colorful {
+  width: 220px;
+  height: 220px;
+  gap: 10px;
+}
+.color-input-picker .react-colorful__saturation {
+  border-radius: calc(var(--radius) - 2px);
+  border-bottom: none;
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+.color-input-picker .react-colorful__last-control {
+  border-radius: 999px;
+}
+.color-input-picker .react-colorful__hue,
+.color-input-picker .react-colorful__alpha {
+  height: 12px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+.color-input-picker .react-colorful__pointer {
+  width: 18px;
+  height: 18px;
+  border-width: 2px;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.12),
+    0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.color-input-picker .react-colorful__interactive:focus .react-colorful__pointer {
+  transform: translate(-50%, -50%) scale(1.15);
+}
