@@ -51,19 +51,35 @@ function SheetContent({
   side = "right",
   showCloseButton = true,
   overlayClassName,
+  autoFocusOnOpen = false,
+  onOpenAutoFocus,
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
   side?: "top" | "right" | "bottom" | "left"
   showCloseButton?: boolean
   /** Override classes applied to the backdrop overlay. */
   overlayClassName?: string
+  /**
+   * Let Radix move focus into the sheet on open (its native behaviour). Off by
+   * default so the sheet doesn't steal focus from the trigger and doesn't fire
+   * focus-triggered tooltips on the first focusable element. Escape / click
+   * outside still close, and the focus-trap engages as soon as you Tab in.
+   */
+  autoFocusOnOpen?: boolean
 }) {
+  // Suppress Radix's open-focus by default; still forward the consumer's handler.
+  const handleOpenAutoFocus = (event: Event) => {
+    if (!autoFocusOnOpen) event.preventDefault()
+    onOpenAutoFocus?.(event)
+  }
+
   return (
     <SheetPortal>
       <SheetOverlay className={overlayClassName} />
       <SheetPrimitive.Content
         data-slot="sheet-content"
         data-side={side}
+        onOpenAutoFocus={handleOpenAutoFocus}
         className={cn(
           "fixed z-50 flex flex-col gap-4 bg-card bg-clip-padding text-sm shadow-lg transition duration-200 ease-in-out data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:h-auto data-[side=bottom]:border-t data-[side=left]:inset-y-0 data-[side=left]:left-0 data-[side=left]:h-full data-[side=left]:w-3/4 data-[side=left]:border-r data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-3/4 data-[side=right]:border-l data-[side=top]:inset-x-0 data-[side=top]:top-0 data-[side=top]:h-auto data-[side=top]:border-b data-[side=left]:sm:max-w-sm data-[side=right]:sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-[side=bottom]:data-open:slide-in-from-bottom-10 data-[side=left]:data-open:slide-in-from-left-10 data-[side=right]:data-open:slide-in-from-right-10 data-[side=top]:data-open:slide-in-from-top-10 data-closed:animate-out data-closed:fade-out-0 data-[side=bottom]:data-closed:slide-out-to-bottom-10 data-[side=left]:data-closed:slide-out-to-left-10 data-[side=right]:data-closed:slide-out-to-right-10 data-[side=top]:data-closed:slide-out-to-top-10",
           className

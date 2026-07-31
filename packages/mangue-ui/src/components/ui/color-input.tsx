@@ -97,7 +97,7 @@ export function ColorInput({
   return (
     <div
       className={cn(
-        "group/color-input relative flex w-full items-center rounded-lg border border-input bg-transparent shadow-xs transition-[color,box-shadow] outline-none",
+        "group/color-input relative flex w-full items-center rounded-lg border border-input bg-card shadow-xs transition-[color,box-shadow] outline-none",
         "focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50",
         "has-disabled:cursor-not-allowed has-disabled:opacity-50 has-disabled:bg-input/50",
         "dark:bg-input/30",
