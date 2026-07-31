@@ -120,12 +120,27 @@ function SidePanelContent({
   className,
   children,
   side = "right",
+  autoFocusOnOpen = false,
+  onOpenAutoFocus,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   /** Edge the panel docks to on desktop. Ignored in bottom-sheet mode. */
   side?: "left" | "right"
+  /**
+   * Let Radix move focus into the panel on open (its native behaviour). Off by
+   * default so the panel doesn't steal focus from the trigger and doesn't fire
+   * focus-triggered tooltips on the first focusable element. Escape / click
+   * outside still close, and the focus-trap engages as soon as you Tab in.
+   */
+  autoFocusOnOpen?: boolean
 }) {
   const drawer = useSidePanelMode()
+
+  // Suppress Radix's open-focus by default; still forward the consumer's handler.
+  const handleOpenAutoFocus = (event: Event) => {
+    if (!autoFocusOnOpen) event.preventDefault()
+    onOpenAutoFocus?.(event)
+  }
 
   if (drawer) {
     return (
@@ -133,6 +148,7 @@ function SidePanelContent({
         <SidePanelOverlay />
         <Drawer.Content
           data-slot="side-panel-content"
+          onOpenAutoFocus={handleOpenAutoFocus}
           onPointerDownOutside={(e) => {
             if (isInsidePopperContent(e.detail.originalEvent.target)) {
               e.preventDefault()
@@ -158,6 +174,7 @@ function SidePanelContent({
       <DialogPrimitive.Content
         data-slot="side-panel-content"
         data-side={side}
+        onOpenAutoFocus={handleOpenAutoFocus}
         className={cn(
           // Floating panel: detached from the screen edges with a 1rem margin,
           // rounded corners, border and elevation (matches AutoKap).
