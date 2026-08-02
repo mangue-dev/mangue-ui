@@ -1,6 +1,7 @@
 {
   "name": "mangue-ui-monorepo",
-  "private": false,
+  "//": "private: la racine est un conteneur de workspaces, jamais un paquet. Ce flag est ce qui fait échouer un `npm publish` lancé ici par mégarde — le paquet à publier est packages/mangue-ui (`npm publish -w mangue-ui`).",
+  "private": true,
   "version": "0.0.0",
   "description": "mangue-ui — a reusable component library (design tokens + shadcn primitives + decoupled app shell) with a live showcase app.",
   "workspaces": [
