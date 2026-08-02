@@ -1,6 +1,6 @@
 {
   "name": "mangue-ui-monorepo",
-  "private": true,
+  "private": false,
   "version": "0.0.0",
   "description": "mangue-ui — a reusable component library (design tokens + shadcn primitives + decoupled app shell) with a live showcase app.",
   "workspaces": [
