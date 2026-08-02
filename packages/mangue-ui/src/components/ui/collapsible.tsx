@@ -2,6 +2,8 @@
 
 import { Collapsible as CollapsiblePrimitive } from "radix-ui"
 
+import { cn } from "../../lib/utils"
+
 function Collapsible({
   ...props
 }: React.ComponentProps<typeof CollapsiblePrimitive.Root>) {
@@ -26,11 +28,13 @@ function CollapsibleContent({
   return (
     <CollapsiblePrimitive.CollapsibleContent
       data-slot="collapsible-content"
-      className={
-        `overflow-hidden data-[state=closed]:animate-[collapsible-up_220ms_ease-out] data-[state=open]:animate-[collapsible-down_220ms_ease-out]${
-          className ? ` ${className}` : ""
-        }`
-      }
+      // Quoted as a plain literal inside cn() on purpose: glued to a `${…}`
+      // template hole, Tailwind's scanner never extracted the open-state class,
+      // so the opening animation silently never played for consumers.
+      className={cn(
+        "overflow-hidden data-[state=closed]:animate-[collapsible-up_220ms_ease-out] data-[state=open]:animate-[collapsible-down_220ms_ease-out]",
+        className
+      )}
       {...props}
     />
   )

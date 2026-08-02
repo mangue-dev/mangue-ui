@@ -13,6 +13,8 @@ export { cn } from "./lib/utils";
 export * from "./lib/motion";
 export * from "./lib/command-filter";
 export * from "./lib/hooks/use-mobile";
+export * from "./lib/hooks/use-scroll-fade";
+export * from "./lib/hooks/use-elapsed";
 
 // ── Theme ──────────────────────────────────────────────────────────────────
 export * from "./components/theme-provider";
@@ -28,10 +30,12 @@ export * from "./components/ui/button";
 export * from "./components/ui/button-group";
 export * from "./components/ui/card";
 export * from "./components/ui/carousel";
+export * from "./components/ui/category-chip";
 export * from "./components/ui/category-pill";
 export * from "./components/ui/checkbox";
 export * from "./components/ui/collapsible";
 export * from "./components/ui/color-input";
+export * from "./components/ui/combobox";
 export * from "./components/ui/command";
 export * from "./components/ui/confirm-delete-dialog";
 export * from "./components/ui/dialog";
@@ -48,6 +52,8 @@ export * from "./components/ui/popover";
 export * from "./components/ui/progress";
 export * from "./components/ui/prompt-input";
 export * from "./components/ui/scroll-area";
+export * from "./components/ui/search-menu";
+export * from "./components/ui/search-select";
 export * from "./components/ui/segmented-control";
 export * from "./components/ui/select";
 export * from "./components/ui/send-button-with-cost";
@@ -75,6 +81,21 @@ export * from "./components/shell/command-menu";
 export * from "./components/shell/search-command";
 export * from "./components/shell/mobile-nav";
 export * from "./components/shell/app-shell";
+
+// ── AI ─────────────────────────────────────────────────────────────────────
+// Ready-to-use agent surfaces. Every label is a prop with an English default:
+// the library ships no i18n, so an app plugs its own strings straight in.
+export * from "./ai/agent-beam";
+export * from "./ai/agent-fab";
+export * from "./ai/agent-input";
+export * from "./ai/context-pill";
+export * from "./ai/context-pill-row";
+export * from "./ai/model-badge";
+export * from "./ai/model-combobox";
+export * from "./ai/model-format";
+export * from "./ai/model-logo";
+export * from "./ai/tool-call-list";
+export * from "./ai/work-accordion";
 
 // ── Chat ───────────────────────────────────────────────────────────────────
 export * from "./chat/numo-chat";
