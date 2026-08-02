@@ -107,7 +107,8 @@ function BreadcrumbTrail({
           </span>
         );
         const interactive = !isLast && (level.href || level.onClick);
-        const linkCls = "min-w-0 transition-colors hover:text-foreground";
+        const linkCls =
+          "min-w-0 rounded-sm outline-none transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50";
         return (
           <React.Fragment key={level.key}>
             {index > 0 ? (
@@ -213,7 +214,7 @@ export function HeaderSearch({
       type="button"
       onClick={onClick}
       className={cn(
-        "group inline-flex h-9 w-full max-w-sm items-center gap-2 rounded-lg border border-border bg-card px-3 text-sm text-muted-foreground transition-colors hover:bg-muted",
+        "group inline-flex h-9 w-full max-w-sm items-center gap-2 rounded-lg border border-border bg-card px-3 text-sm text-muted-foreground outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50",
         className,
       )}
     >

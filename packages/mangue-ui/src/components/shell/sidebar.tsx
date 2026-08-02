@@ -78,7 +78,7 @@ export function Sidebar({
             type="button"
             onClick={() => setCollapsed(!collapsed)}
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sidebar-foreground/60 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
+            className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sidebar-foreground/60 outline-none transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             {collapsed ? (
               <PanelLeftOpen className="h-[18px] w-[18px]" />
@@ -140,7 +140,7 @@ function SidebarRow({ item, collapsed, active, linkComponent: Link }: SidebarRow
   const Icon = item.icon;
 
   const rowClass = cn(
-    "group relative flex h-9 items-center gap-2.5 rounded-lg px-2.5 text-sm font-medium transition-colors",
+    "group relative flex h-9 items-center gap-2.5 rounded-lg px-2.5 text-sm font-medium outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/50",
     collapsed && "justify-center px-0",
     active
       ? "bg-sidebar-accent text-sidebar-accent-foreground"

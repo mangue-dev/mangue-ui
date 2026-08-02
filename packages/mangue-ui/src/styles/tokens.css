@@ -132,6 +132,8 @@
   --radius-4xl: calc(var(--radius) + 16px);
 
   /* Semantic color mappings */
+  --color-control: var(--control);
+  --color-control-hover: var(--control-hover);
   --color-surface-raised: var(--surface-raised);
   --color-surface-sunken: var(--surface-sunken);
   --color-surface-glass: var(--surface-glass);
@@ -220,6 +222,11 @@
   --sidebar-ring: oklch(0.676 0.060 270);
 
   /* Semantic tokens */
+  /* Control fill — the surface of form controls (input, select, checkbox…).
+     Must stay distinguishable from BOTH --background and --card, otherwise a
+     control dropped inside a Card reads as having no background at all. */
+  --control: oklch(0.950 0.008 268);
+  --control-hover: oklch(0.935 0.010 268);
   --surface-raised: oklch(0.995 0.002 266);
   --surface-sunken: oklch(0.940 0.008 268);
   --surface-glass: oklch(0.965 0.006 268 / 60%);
@@ -283,6 +290,10 @@
   --sidebar-ring: oklch(0.555 0 0);
 
   /* Semantic tokens dark */
+  /* Opaque on purpose: an alpha fill here would multiply with the alpha already
+     carried by --input and collapse to a few percent of white. */
+  --control: oklch(0.215 0.003 250);
+  --control-hover: oklch(0.245 0.003 250);
   --surface-raised: oklch(0.170 0.003 250);
   --surface-sunken: oklch(0.090 0.003 250);
   --surface-glass: oklch(0.170 0.003 250 / 60%);

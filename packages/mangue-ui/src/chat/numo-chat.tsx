@@ -147,7 +147,7 @@ export function NumoChat({
               key={suggestion.key}
               type="button"
               onClick={suggestion.onSelect}
-              className="rounded-full border border-border bg-card px-3 py-1.5 text-xs text-foreground transition-colors hover:bg-muted"
+              className="rounded-full border border-border bg-card px-3 py-1.5 text-xs text-foreground outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50"
             >
               {suggestion.label}
             </button>
