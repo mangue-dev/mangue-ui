@@ -58,7 +58,7 @@ export function WizardStepper({
                 onClick={() => onStepClick?.(stepNumber)}
                 aria-label={label}
                 title={label}
-                className="group flex cursor-pointer items-center px-0.5 py-2 -my-2"
+                className="group flex cursor-pointer items-center rounded-sm px-0.5 py-2 -my-2 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
               >
                 {bar}
               </button>
