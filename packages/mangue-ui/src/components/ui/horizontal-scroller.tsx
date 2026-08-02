@@ -20,6 +20,20 @@ interface HorizontalScrollerProps {
   viewportClassName?: string;
   prevLabel?: string;
   nextLabel?: string;
+  /**
+   * Keep the arrows transparent until the container is hovered or something
+   * inside it takes focus. For a row of small chips, permanent arrows read as
+   * chrome; on demand they read as an affordance.
+   */
+  revealOnHover?: boolean;
+  /**
+   * Soft gradient over each scrollable edge. On by default; turn it off for a
+   * row of pills, where fading a chip in half looks like a rendering bug
+   * rather than a hint.
+   */
+  edgeFade?: boolean;
+  /** `sm` renders 20px round arrows sized for a chip row. */
+  arrowSize?: "sm" | "default";
 }
 
 /**
@@ -36,6 +50,9 @@ export function HorizontalScroller({
   viewportClassName,
   prevLabel = "Scroll left",
   nextLabel = "Scroll right",
+  revealOnHover = false,
+  edgeFade = true,
+  arrowSize = "default",
 }: HorizontalScrollerProps) {
   const ref = React.useRef<HTMLDivElement>(null);
   const [canLeft, setCanLeft] = React.useState(false);
@@ -73,8 +90,18 @@ export function HorizontalScroller({
     el.scrollBy({ left: dir === "left" ? -amount : amount, behavior: "smooth" });
   };
 
+  const arrowClass = cn(
+    "absolute top-1/2 z-20 -translate-y-1/2 rounded-full bg-card/95 shadow-md backdrop-blur-sm",
+    arrowSize === "sm" && "size-5 min-w-0 border border-border p-0 shadow-sm",
+    // Revealed on hover — and on focus too, otherwise a keyboard user would
+    // tab onto an invisible button.
+    revealOnHover &&
+      "opacity-0 transition-opacity group-hover/scroller:opacity-100 focus-visible:opacity-100",
+  );
+  const chevronClass = arrowSize === "sm" ? "size-3" : undefined;
+
   return (
-    <div className={cn("relative", className)}>
+    <div className={cn("group/scroller relative", className)}>
       <div
         ref={ref}
         className={cn("overflow-x-auto scrollbar-none", viewportClassName)}
@@ -83,10 +110,10 @@ export function HorizontalScroller({
       </div>
 
       {/* Edge fades hint at hidden content on each scrollable side. */}
-      {canLeft && (
+      {edgeFade && canLeft && (
         <div className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-card to-card/0" />
       )}
-      {canRight && (
+      {edgeFade && canRight && (
         <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-card to-card/0" />
       )}
 
@@ -97,9 +124,9 @@ export function HorizontalScroller({
           size="icon-sm"
           aria-label={prevLabel}
           onClick={() => scroll("left")}
-          className="absolute left-1.5 top-1/2 z-20 -translate-y-1/2 rounded-full bg-card/95 shadow-md backdrop-blur-sm"
+          className={cn(arrowClass, arrowSize === "sm" ? "left-0" : "left-1.5")}
         >
-          <ChevronLeft />
+          <ChevronLeft className={chevronClass} />
         </Button>
       )}
       {canRight && (
@@ -109,9 +136,12 @@ export function HorizontalScroller({
           size="icon-sm"
           aria-label={nextLabel}
           onClick={() => scroll("right")}
-          className="absolute right-1.5 top-1/2 z-20 -translate-y-1/2 rounded-full bg-card/95 shadow-md backdrop-blur-sm"
+          className={cn(
+            arrowClass,
+            arrowSize === "sm" ? "right-0" : "right-1.5",
+          )}
         >
-          <ChevronRight />
+          <ChevronRight className={chevronClass} />
         </Button>
       )}
     </div>

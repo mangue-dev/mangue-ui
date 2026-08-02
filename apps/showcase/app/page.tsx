@@ -20,11 +20,15 @@ import {
   LogOut,
   UserRound,
   X,
+  Trash2,
+  Megaphone,
+  ArrowUpRight,
 } from "lucide-react";
 
 import {
   AppShell,
   Sidebar,
+  SidebarFooterRow,
   Header,
   SearchCommand,
   MobileNav,
@@ -48,6 +52,7 @@ import {
   type ChatMessage,
 } from "mangue-ui";
 
+import { AiGallery } from "./_components/ai-gallery";
 import { PrimitivesGallery } from "./_components/primitives-gallery";
 
 const NAV_SECTIONS: NavSection[] = [
@@ -69,6 +74,20 @@ const NAV_SECTIONS: NavSection[] = [
     ],
   },
   {
+    label: "Galleries",
+    items: [
+      { key: "primitives", label: "Primitives", icon: Palette, href: "#primitives" },
+      {
+        key: "ai",
+        label: "AI",
+        icon: Sparkles,
+        href: "#ai",
+        shortcut: "A",
+        badge: <Badge variant="secondary">new</Badge>,
+      },
+    ],
+  },
+  {
     label: "General",
     items: [
       { key: "members", label: "Members", icon: Users, href: "#members" },
@@ -77,10 +96,27 @@ const NAV_SECTIONS: NavSection[] = [
   },
 ];
 
+/** Nav keys that count as "inside a project" — drives the sidebar mode swap. */
+const PROJECT_KEYS = new Set(["mobile", "website", "design"]);
+
 export default function Home() {
   const { open, setOpen } = useCommandMenu();
   const { resolvedTheme, toggleTheme } = useTheme();
   const [activeKey, setActiveKey] = React.useState("inbox");
+  const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
+
+  // Holding ⌘ arms the chord: every nav row with a `shortcut` shows its key.
+  const [chordArmed, setChordArmed] = React.useState(false);
+  React.useEffect(() => {
+    const arm = (e: KeyboardEvent) => setChordArmed(e.metaKey);
+    window.addEventListener("keydown", arm);
+    window.addEventListener("keyup", arm);
+    window.addEventListener("blur", () => setChordArmed(false));
+    return () => {
+      window.removeEventListener("keydown", arm);
+      window.removeEventListener("keyup", arm);
+    };
+  }, []);
   const [chatOpen, setChatOpen] = React.useState(false);
   const [messages, setMessages] = React.useState<ChatMessage[]>([
     {
@@ -145,7 +181,42 @@ export default function Home() {
           activeKey={activeKey}
           linkComponent={Link}
           header={<Brand />}
-          footer={<UserMenu />}
+          // Collapsed, the mark takes the reopen button's place and cross-fades
+          // to it on hover — the whole square is the expand button.
+          collapsedBrand={<BrandMark />}
+          // Changing this replays the nav's animated swap. Here it flips when
+          // you enter the "Projects" area, so the demo shows the effect.
+          modeKey={PROJECT_KEYS.has(activeKey) ? "project" : "root"}
+          modeDirection={PROJECT_KEYS.has(activeKey) ? "forward" : "backward"}
+          // Hold ⌘ to arm the chord: rows with a `shortcut` surface their key.
+          chordArmed={chordArmed}
+          chordPrefix="⌘"
+          onItemHover={(item) => {
+            // The warm-up hook: where an app prefetches the page's caches.
+            if (process.env.NODE_ENV === "development") {
+              console.debug("prefetch", item.key);
+            }
+          }}
+          footer={
+            <div className="flex flex-col gap-0.5">
+              <SidebarFooterRow
+                icon={Trash2}
+                label="Trash"
+                collapsed={sidebarCollapsed}
+                onClick={() => toast("Trash")}
+              />
+              <SidebarFooterRow
+                icon={Megaphone}
+                label="Share feedback"
+                collapsed={sidebarCollapsed}
+                trailingIcon={ArrowUpRight}
+                onClick={() => toast("Feedback")}
+              />
+              <UserMenu collapsed={sidebarCollapsed} />
+            </div>
+          }
+          collapsed={sidebarCollapsed}
+          onCollapsedChange={setSidebarCollapsed}
         />
       }
       header={
@@ -183,7 +254,12 @@ export default function Home() {
         />
       }
     >
-      <PrimitivesGallery />
+      <div id="primitives">
+        <PrimitivesGallery />
+      </div>
+      <div id="ai">
+        <AiGallery />
+      </div>
 
       <CommandMenu open={open} onOpenChange={setOpen} groups={commandGroups} />
 
@@ -227,18 +303,34 @@ function Brand() {
   );
 }
 
-function UserMenu() {
+/** The bare mark, for the collapsed sidebar's cross-fading square. */
+function BrandMark() {
+  return (
+    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+      <span className="text-sm font-bold">m</span>
+    </div>
+  );
+}
+
+function UserMenu({ collapsed = false }: { collapsed?: boolean }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex w-full items-center gap-2 rounded-lg p-1.5 text-left transition-colors hover:bg-sidebar-accent">
+        <button
+          className={
+            "flex items-center rounded-lg text-left transition-colors hover:bg-sidebar-accent " +
+            (collapsed ? "w-9 justify-center p-1" : "w-full gap-2 p-1.5")
+          }
+        >
           <Avatar className="h-7 w-7">
             <AvatarFallback>CG</AvatarFallback>
           </Avatar>
-          <div className="min-w-0 flex-1">
-            <div className="truncate text-sm font-medium">Clément</div>
-            <div className="truncate text-xs text-muted-foreground">clement@mangue.dev</div>
-          </div>
+          {!collapsed && (
+            <div className="min-w-0 flex-1">
+              <div className="truncate text-sm font-medium">Clément</div>
+              <div className="truncate text-xs text-muted-foreground">clement@mangue.dev</div>
+            </div>
+          )}
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-56">
