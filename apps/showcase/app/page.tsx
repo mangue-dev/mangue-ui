@@ -54,6 +54,7 @@ import {
 
 import { AiGallery } from "./_components/ai-gallery";
 import { PrimitivesGallery } from "./_components/primitives-gallery";
+import { SettingsGallery } from "./_components/settings-gallery";
 
 const NAV_SECTIONS: NavSection[] = [
   {
@@ -259,6 +260,9 @@ export default function Home() {
       </div>
       <div id="ai">
         <AiGallery />
+      </div>
+      <div id="settings">
+        <SettingsGallery />
       </div>
 
       <CommandMenu open={open} onOpenChange={setOpen} groups={commandGroups} />

@@ -47,6 +47,24 @@ Three rules govern every port. They are why some things moved and others did not
 | `components/category-pill.tsx` | *(new)* `src/components/ui/category-chip.tsx` | **port as a NEW component** — see the note below | `CategoryChip` |
 | `app/globals.css:465-504` (`.text-shimmer`) | `src/styles/tokens.css` | **port** as a `@utility`, reduced-motion variant included | `class="text-shimmer"` |
 
+### 0.4.0 — the settings layer (minddy MIN-167)
+
+| minddy | mangue-ui equivalent | verdict | import from `mangue-ui` |
+| --- | --- | --- | --- |
+| `components/ui/field.tsx` | *(new)* `src/components/ui/field.tsx` | **port** — minddy's copy replaced its `cva` by a class table (no `cva` in that repo); the library keeps `cva`, which it already depends on, so `orientation` is typed by `VariantProps` | `Field`, `FieldGroup`, `FieldContent`, `FieldLabel`, `FieldTitle`, `FieldDescription`, `FieldError`, `FieldSeparator`, `FieldSet`, `FieldLegend`, `FieldOrientation` |
+| `components/settings/help-hint.tsx` | *(new)* `src/components/ui/help-hint.tsx` | **adapt** — the `Settings.feedbackLearnMore` key becomes a `label` prop defaulting to `"Learn more"` | `HelpHint` |
+| `components/settings/settings-ui.tsx` | *(new)* `src/components/settings/settings-group.tsx` | **port** — pure layout, every string already a prop; only the ⓘ label had to be lifted (`helpLabel`) | `SettingsGroup`, `SettingsRow`, `SettingsListRow`, `SettingsEmpty` |
+| `components/settings-shell.tsx` | *(new)* `src/components/settings/settings-layout.tsx` | **adapt** — the `?tab=` reading (`useSearchParams` / `useRouter`) and the `trackEvent` call stay in minddy and become `value` / `onValueChange`; the animated pill, the rail and the column width port as-is | `SettingsLayout`, `SettingsTabItem`, `SETTINGS_LAYOUT_MAX_WIDTH` |
+| `components/route-skeletons.tsx` (`SettingsPageSkeleton`) | `src/components/settings/settings-layout.tsx` | **port** — it only exists to match the layout, so it belongs next to it or it drifts | `SettingsLayoutSkeleton` |
+
+**Why this layer is in the library at all.** MIN-167 diagnosed a settings screen
+whose 19 tabs each looked different, and named `mangue-ui` as the root cause. The
+diagnosis was half right: the primitives were fine, but the library exported *no
+form layout at all* — no `Field`, no `FormRow` — so every screen wrote its own
+`flex` and six authors wrote six of them. Shipping `Field` fixes the missing
+primitive; shipping `SettingsGroup` / `SettingsRow` fixes the missing *grammar*,
+which is what actually made the tabs diverge.
+
 ### What the sidebar gained
 
 All additive — minddy's `AppSidebar` becomes a configuration of `Sidebar`:

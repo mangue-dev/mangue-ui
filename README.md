@@ -4,15 +4,18 @@ A reusable component library extracted from **AutoKap**'s design system, so you
 can spin up a new product (a Linear-style ticketing app, a dashboard, anything)
 that looks and feels like AutoKap in minutes.
 
-It ships three layers:
+It ships four layers:
 
 1. **Design tokens** — the full OKLch color system (light + dark), radius, fonts,
    spacing and breakpoints, as Tailwind v4 `@theme` variables.
-2. **Primitives** — the 46 radix-nova / shadcn components (button, dialog,
-   dropdown, select, command palette, sheet, tooltip, …), copied verbatim from
-   AutoKap and **fully decoupled** from any AutoKap business logic.
+2. **Primitives** — the radix-nova / shadcn components (button, dialog,
+   dropdown, select, command palette, sheet, tooltip, `Field`, …), copied
+   verbatim from AutoKap and **fully decoupled** from any AutoKap business logic.
 3. **App shell** — decoupled, props-driven `Sidebar`, `Header`, `CommandMenu`,
    `MobileNav`, `AppShell`, plus a presentational `NumoChat` panel.
+4. **Settings screens** — `SettingsLayout`, `SettingsGroup`, `SettingsRow`,
+   `SettingsListRow`: the grammar that turns the primitives into a settings page
+   that reads the same on every tab (see below).
 
 There is **zero AutoKap logic** in here (no Supabase, no project context, no
 capture engine). Everything is data/props in, UI out.
@@ -96,6 +99,98 @@ The whole library recolors from **one variable**. In
 
 Buttons, focus rings, links, the sidebar active state, charts and `--brand` all
 derive from it. Optionally tune `--brand` / `--accent-glow` to match.
+
+---
+
+## Settings screens
+
+Primitives alone don't make a settings screen. Given a `Switch` and a `Select`,
+two authors lay them out differently — and a settings page whose tabs each look
+different is unreadable no matter how good the controls are. That layer is now
+part of the library, so **settings built with mangue-ui always come out looking
+the same**.
+
+Three levels, each of them marked:
+
+```
+Page title        text-2xl font-display          "Settings"
+└─ Group (card)   text-sm font-medium + icon     "Appearance"
+   └─ Row         label left · control right, hairline between two
+```
+
+```tsx
+import {
+  SettingsLayout, SettingsGroup, SettingsRow, SettingsListRow, SettingsEmpty,
+  type SettingsTabItem,
+} from "mangue-ui";
+
+const tabs: SettingsTabItem[] = [
+  {
+    value: "appearance",
+    label: "Appearance",
+    icon: Palette,
+    content: (
+      <SettingsGroup
+        icon={Palette}
+        title="Appearance"
+        description="The language you read the app in, and how it looks."
+      >
+        <SettingsRow
+          htmlFor="language"
+          label="Language"
+          control={<Select /* … */ />}
+        />
+        <SettingsRow
+          htmlFor="dark"
+          label="Dark mode"
+          hint="Follows your system unless you pick one."
+          control={<Switch id="dark" /* … */ />}
+        />
+      </SettingsGroup>
+    ),
+  },
+];
+
+<SettingsLayout title="Settings" tabs={tabs} value={tab} onValueChange={setTab} />;
+```
+
+**The rules the layer encodes**
+
+- **Key/value by default, not always.** `SettingsRow` is `orientation="responsive"`:
+  label left, control right, stacked below `@md` — a *container* query, so a row
+  in a narrow panel stacks on a wide screen too. A 500-character textarea, an
+  enrolment QR code or a dropzone take `orientation="vertical"`. Drop the control
+  below the label only when it plainly doesn't fit at the end of the line.
+- **Give every group a `description`.** Without one the title floats alone beside
+  its icon chip and the reader must open the group to learn what it holds. The
+  header re-centers itself when there is none, but that is a fallback, not a
+  style.
+- **Long prose goes behind `help`** (an ⓘ popover), never between two switches.
+- **`variant="block"`** for a group whose body is a wizard rather than rows.
+  **`tone="destructive"`** for a danger zone — the card carries the tone, so
+  don't nest a red box inside it.
+- **The active tab pill slides** (a shared `layoutId`), and holds still under
+  `prefers-reduced-motion`.
+
+**Deep-linkable tabs.** The library owns no router. Read your `?tab=` in the app
+and drive the layout with `value` / `onValueChange`; that is also where analytics
+belongs. Omit `value` and the layout keeps its own state from `defaultValue`.
+
+```tsx
+const params = useSearchParams();          // wrap in <Suspense> if prerendered
+<SettingsLayout
+  tabs={tabs}
+  value={params.get("tab") ?? "profile"}
+  onValueChange={(next) => { track(next); router.replace(`?tab=${next}`); }}
+/>
+```
+
+`SettingsLayoutSkeleton` renders the same grid (rail + cards) for your route's
+loading state, so the page doesn't jump when it resolves.
+
+The showcase renders a full six-tab settings screen at `#settings`
+(`apps/showcase/app/_components/settings-gallery.tsx`) — the reference for what
+this is supposed to look like.
 
 ---
 
