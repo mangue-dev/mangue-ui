@@ -40,6 +40,8 @@ export * from "./components/ui/command";
 export * from "./components/ui/confirm-delete-dialog";
 export * from "./components/ui/dialog";
 export * from "./components/ui/dropdown-menu";
+export * from "./components/ui/field";
+export * from "./components/ui/help-hint";
 export * from "./components/ui/horizontal-scroller";
 export * from "./components/ui/hover-card";
 export * from "./components/ui/icon-button";
@@ -72,6 +74,12 @@ export * from "./components/ui/textarea";
 export * from "./components/ui/tooltip";
 export * from "./components/ui/type-badge";
 export * from "./components/ui/wizard-stepper";
+
+// ── Settings screens ───────────────────────────────────────────────────────
+// The grammar that turns primitives into a settings page: a card per group, a
+// key/value row per option, one column, one tab rail. Built on `Field`.
+export * from "./components/settings/settings-group";
+export * from "./components/settings/settings-layout";
 
 // ── App shell (decoupled) ──────────────────────────────────────────────────
 export * from "./components/shell/types";
