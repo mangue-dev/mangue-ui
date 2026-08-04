@@ -5,7 +5,7 @@ import { cn } from "../../lib/utils"
 export type StatusChipTone = "neutral" | "info" | "success" | "warning" | "danger"
 
 const TONE_CLASSES: Record<StatusChipTone, string> = {
-  neutral: "bg-muted text-muted-foreground border-border",
+  neutral: "bg-control text-foreground border-border",
   info: "bg-brand/10 text-brand border-brand/20 dark:text-brand",
   success:
     "bg-success/10 text-success border-success/20 dark:bg-success/15",

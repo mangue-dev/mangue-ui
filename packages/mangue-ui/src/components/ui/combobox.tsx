@@ -237,7 +237,7 @@ export function Combobox({
             disabled={disabled}
             className={cn(
               COMPACT_CHIP,
-              "bg-muted/50 text-foreground/80 hover:bg-muted",
+              "bg-control text-foreground hover:bg-control-hover",
               className,
             )}
           >

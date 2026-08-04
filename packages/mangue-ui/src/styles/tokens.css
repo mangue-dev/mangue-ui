@@ -222,11 +222,17 @@
   --sidebar-ring: oklch(0.676 0.060 270);
 
   /* Semantic tokens */
-  /* Control fill — the surface of form controls (input, select, checkbox…).
-     Must stay distinguishable from BOTH --background and --card, otherwise a
-     control dropped inside a Card reads as having no background at all. */
-  --control: oklch(0.950 0.008 268);
-  --control-hover: oklch(0.935 0.010 268);
+  /* Control fill — the surface of form controls (input, select, checkbox…) and
+     of neutral chips (secondary badge, status chip, button-group text).
+     PURE WHITE on purpose: in light mode a gray fill sitting on a white card is
+     read as "disabled", because gray-on-white is exactly what our disabled state
+     looks like (`disabled:bg-muted`). A control is delimited by its border
+     (--input / --border), never by a tint — so it stays legible on --background
+     (0.975) AND on --card (0.995) without ever borrowing the disabled look.
+     --control-hover keeps the old --control value: hover DARKENS from white,
+     which is also what off-tracks (Switch) need to stay visible. */
+  --control: oklch(1 0 0);
+  --control-hover: oklch(0.950 0.008 268);
   --surface-raised: oklch(0.995 0.002 266);
   --surface-sunken: oklch(0.940 0.008 268);
   --surface-glass: oklch(0.965 0.006 268 / 60%);
