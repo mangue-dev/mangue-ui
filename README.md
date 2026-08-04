@@ -350,18 +350,30 @@ The shell uses a single canonical breakpoint, `desktop` = **1200px**
 
 ---
 
-## Turning this into a published npm package (later)
+## Publishing
 
-The library is already structured as a package (`packages/mangue-ui` with its own
-`package.json`, `exports` map and barrel). To publish:
+The library is on npm as [`mangue-ui`](https://www.npmjs.com/package/mangue-ui).
+It ships **TypeScript/TSX source, with no build step**: `files` is `["src"]` and
+`exports` points straight at it. The host app's bundler compiles it (Next needs
+`transpilePackages: ["mangue-ui"]`) and Tailwind scans it, which is what keeps
+the tokens overridable. Nothing to build, nothing to keep in sync with a `dist/`.
 
-1. Add a build step (e.g. `tsup src/index.ts --format esm --dts` with an alias so
-   relative imports resolve) and point `exports` at `dist/` instead of `src/`.
-2. Move `react`/`react-dom` (already peers) and keep the rest as `dependencies`.
-3. `npm publish` from `packages/mangue-ui`.
+```bash
+npm login                       # once — the stored token expires
+npm run typecheck               # what prepublishOnly will run anyway
+npm publish -w mangue-ui        # from the REPO ROOT
+```
 
-Until then, it works perfectly as a workspace dependency (no build needed —
-Next transpiles it from source via `transpilePackages: ["mangue-ui"]`).
+The root `package.json` is `private`, so a `npm publish` fired there by mistake
+fails instead of publishing the monorepo; `-w mangue-ui` selects the workspace.
+`prepublishOnly` runs the typecheck as a gate. Check what you are about to ship
+with `npm pack --dry-run -w mangue-ui` — only `src/`, `package.json`, `README.md`
+and `LICENSE` should be in the list.
+
+**Bump `packages/mangue-ui/package.json` first.** While the API is pre-1.0, a
+breaking change bumps the *minor* (0.5.0 removed the sidebar's manual collapse);
+additive work bumps the patch. `packages/mangue-ui/docs/project-inventory.md`
+records what landed in each minor and where it came from.
 
 ---
 

@@ -104,6 +104,19 @@ the initial bundle is the point.
   responsive breadcrumb), `SearchCommand`, `CommandMenu` + `useCommandMenu`,
   `MobileNav`. Props-driven and router-agnostic (pass your `<Link>` via
   `linkComponent`). Ultrawide-centered app canvas on ≥3xl screens.
+- **Double sidebar** — `SecondarySidebarProvider` + `SecondarySidebar`: a page
+  mounts its own navigation column (a list of pull requests, an inbox, settings
+  sections) and the shell displays it full height, left of the header. Mounting
+  one rails the primary sidebar — it keeps its 56px of icons in the flow and
+  unfolds *over* the second column on hover, shifting nothing. That rail is the
+  only fold: there is no manual collapse. `SidebarFilterField` + `matchesFilter`
+  give the column its filter; `useSidebarState` is how a footer piece learns the
+  bar is folded.
+- **Settings** (`components/settings/*`) — `SettingsLayout`, `SettingsGroup`,
+  `SettingsRow`, `SettingsListRow`: one card per group, one key/value row per
+  option, so two authors write the same screen. Inside a secondary-sidebar
+  provider the tab rail moves out into that column, with a filter over the
+  cards (`sections`) that opens the right tab, scrolls to the card and rings it.
 - **AI** (`ai/*`) — the agent-facing half, ready to mount:
   - `AgentInput` — the composer, wrapped in `AgentBeam`, with a context row, a
     toolbar and a send/stop cluster.
