@@ -3,6 +3,10 @@
 import * as React from "react";
 
 import { cn } from "../../lib/utils";
+import {
+  SecondarySidebarSlot,
+  useSecondarySidebarContext,
+} from "./secondary-sidebar";
 
 export interface AppShellProps {
   /** A <Sidebar/>. Automatically hidden below the `desktop` breakpoint. */
@@ -11,17 +15,39 @@ export interface AppShellProps {
   header?: React.ReactNode;
   /** A <MobileNav/>, shown only below the `desktop` breakpoint. */
   mobileNav?: React.ReactNode;
+  /**
+   * Where a page's `<SecondarySidebar>` lands, between the primary sidebar and
+   * the header + content column. Rendered on its own as soon as a
+   * `<SecondarySidebarProvider>` sits above the shell; pass `false` to place the
+   * `<SecondarySidebarSlot>` yourself.
+   */
+  secondarySidebar?: boolean;
   children: React.ReactNode;
   className?: string;
 }
 
 /**
- * The assembled application layout: fixed-height row of [sidebar | (header +
+ * The assembled application layout: fixed-height row of [nav | (header +
  * scrollable main)], with an optional mobile bottom nav. Responsive behaviour
- * matches AutoKap: the sidebar is desktop-only (>=1200px), the mobile nav
+ * matches AutoKap: the sidebars are desktop-only (>=1200px), the mobile nav
  * takes over below it.
+ *
+ * The nav column holds the primary sidebar AND the secondary sidebar's landing
+ * point: both live in the same box, left of the header — which is what shifts
+ * the breadcrumb and the content along, instead of letting them run above a
+ * column.
  */
-export function AppShell({ sidebar, header, mobileNav, children, className }: AppShellProps) {
+export function AppShell({
+  sidebar,
+  header,
+  mobileNav,
+  secondarySidebar = true,
+  children,
+  className,
+}: AppShellProps) {
+  // `null` outside a provider — a single-sidebar app pays nothing for this.
+  const secondary = useSecondarySidebarContext();
+  const withSlot = secondarySidebar && secondary !== null;
   // Lock document scroll while the shell owns the viewport (all scrolling is
   // handled by the inner <main>) and, on ultrawide (≥3xl), center the shell as a
   // card with an aurora canvas behind it — the body becomes the centering
@@ -77,7 +103,12 @@ export function AppShell({ sidebar, header, mobileNav, children, className }: Ap
         className,
       )}
     >
-      {sidebar ? <div className="hidden shrink-0 desktop:block">{sidebar}</div> : null}
+      {sidebar || withSlot ? (
+        <div className="hidden h-full shrink-0 desktop:flex">
+          {sidebar}
+          {withSlot ? <SecondarySidebarSlot /> : null}
+        </div>
+      ) : null}
       <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
         {header}
         <main

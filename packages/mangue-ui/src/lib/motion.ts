@@ -6,6 +6,17 @@ export const transitions = {
   snappy: { type: "spring", stiffness: 500, damping: 35 } as Transition,
   fade: { duration: 0.15, ease: "easeOut" } as Transition,
   slow: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } as Transition,
+  /**
+   * The CHROME slide: the primary sidebar's width, the secondary sidebar's
+   * gutter, and by ricochet everything to their right — header, breadcrumb,
+   * content. All of them MUST share this curve, otherwise their edges drift
+   * apart during the trip instead of gliding as one block.
+   *
+   * A duration rather than a spring: a spring overshoots its target, and a
+   * layout width that overshoots makes the whole right half of the screen
+   * judder. The curve leaves fast and settles softly.
+   */
+  shell: { duration: 0.32, ease: [0.32, 0.72, 0, 1] } as Transition,
 };
 
 export const variants = {

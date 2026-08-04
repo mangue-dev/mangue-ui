@@ -72,8 +72,9 @@ All additive — minddy's `AppSidebar` becomes a configuration of `Sidebar`:
 - `modeKey` + `modeDirection` → the animated home ↔ project swap
   (`AnimatePresence mode="wait"`, `transitions.fade`, logo and footer immobile),
   short-circuited under `useReducedMotion`.
-- `collapsedBrand` → collapsed, the mark sits where the reopen button would be
-  and cross-fades to `PanelLeftOpen` on hover; the whole square is the button.
+- `collapsedBrand` → what the rail shows in the brand's place; the two
+  cross-fade in place as the bar unfolds (0.5.0 removed the reopen button this
+  used to double as — see below).
 - `NavItem.shortcut` + `chordArmed` / `chordPrefix` / `chordSeparator` → the
   trailing `Kbd` while a chord is armed, and the "prefix *then* key" tooltip.
 - `NavItem.showBadgeCollapsed` / `badgeCollapsed` → the corner pip on the icon
@@ -82,10 +83,33 @@ All additive — minddy's `AppSidebar` becomes a configuration of `Sidebar`:
   warm-up hook (`usePrefetchProject`).
 - `whileTap: { scale: 0.97 }` on links too (the `motion.create(Link)` is
   memoised per link component — rebuilding it each render would remount every
-  row), the fixed-width left-anchored icon box when collapsed, and the
-  `px-2.5` / `px-3.5` gutters.
+  row) and the fixed-width left-anchored icon box when collapsed. The gutters
+  were unified in 0.5.0 (`px-2.5` + `pl-[9px]` in both states) so an icon does
+  not drift by 9px when the rail opens.
 - `SidebarFooterRow` is exported so a footer composes without copying the
   classes.
+
+### 0.5.0 — the double sidebar (minddy `fcb2a4d`, `dc67855`, `c80856e`)
+
+| minddy | mangue-ui equivalent | verdict | import from `mangue-ui` |
+| --- | --- | --- | --- |
+| `lib/secondary-sidebar-context.tsx` | *(new)* `src/components/shell/secondary-sidebar.tsx` | **port** — the mounted-panes COUNT (not a boolean) and the portal slot move as-is; `routeHasSecondaryNav(pathname)` stays in minddy and becomes the provider's `reserve` prop, the `hydrated` bookkeeping moving inside | `SecondarySidebarProvider`, `useSecondarySidebar`, `useSecondarySidebarExpected` |
+| `components/secondary-sidebar.tsx` | *(same file)* | **port** — pane + gutter, verbatim behaviour (hoisted ≥1200px, in place below) | `SecondarySidebar`, `SecondarySidebarSlot`, `SECONDARY_SIDEBAR_WIDTH` |
+| `components/sidebar-filter-field.tsx` | *(new)* `src/components/shell/sidebar-filter-field.tsx` | **adapt** — `isTypingTarget` is inlined (minddy's keyboard context does not cross), the `/` key becomes a `shortcut` prop, and the AZERTY note travels with the code. `eventKey`'s layout mapping stays in minddy | `SidebarFilterField`, `matchesFilter`, `normalizeFilterText` |
+| `components/app-sidebar.tsx` (rail mode) | `src/components/shell/sidebar.tsx` | **merge** — the ghost + absolute aside, the hover/focus/menu latches and their reset on the way out of rail mode. `overlay` defaults to the provider above, so a page that mounts a pane rails the bar with nothing wired; `usePathname` becomes `railResetKey` | `Sidebar`, `useSidebarState` |
+| `components/app-shell-chrome.tsx` (the nav column) | `src/components/shell/app-shell.tsx` | **absorb** — the `<div className="relative flex h-full">` wrapper and the slot are the shell's job, not each app's | `AppShell` |
+| `components/settings-shell.tsx` (post-`dc67855`) | `src/components/settings/settings-layout.tsx` | **adapt** — the rail-in-the-secondary-sidebar shape, the card filter and the mobile list↔detail. minddy's `lib/settings-sections.ts` catalogue becomes a `sections` prop, and `?section=` becomes `focusSection` / `onSectionFocused` | `SettingsLayout`, `SettingsSectionItem`, `settingsSectionAnchor`, `SETTINGS_CONTENT_MAX_WIDTH` |
+| `app/globals.css` (`scrollbar-quiet`, `[data-settings-focus]`) | `src/styles/tokens.css` | **port** — the utility and the ring keyframes, reduced-motion variant included. The app-wide `*` scrollbar rules stay in minddy: painting every scrollbar is an app decision, so the library only ships the variables and the quiet utility | `class="scrollbar-quiet"`, `--scrollbar-thumb` |
+| `lib/motion.ts` (`transitions.shell`) | `src/lib/motion.ts` | **port** — the one curve the sidebar width, the gutter and everything to their right must share | `transitions.shell` |
+
+**What `dc67855` decided, and the library now enforces.** There is no manual
+fold left: no toggle button, no `collapsible` / `collapsed` /
+`defaultCollapsed` / `onCollapsedChange`, no `SidebarLabels`. The rail is the
+only fold — it exists where a second column needs the room, and everywhere else
+the bar is simply open. A manual fold on top of it meant two folded bars for two
+different reasons, one of which you had to know a shortcut to undo. Consumers
+that drove `collapsed` drop the props; `useSidebarState()` is how a footer piece
+now learns the bar is folded.
 
 ### Subpath exports (a request minddy left in a comment)
 

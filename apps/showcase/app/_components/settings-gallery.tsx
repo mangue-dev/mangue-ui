@@ -33,17 +33,72 @@ import {
   SettingsRow,
   Switch,
   Textarea,
+  type SettingsSectionItem,
   type SettingsTabItem,
 } from "mangue-ui";
+
+/**
+ * Every CARD of the screen, named. What people type is the name of the card —
+ * "theme", "danger zone", "two-factor" — and none of those is a tab. This is
+ * what the rail's filter searches: picking a row opens the right tab, scrolls to
+ * the card and rings it. The ids match the `sectionId` of the groups below.
+ */
+const SECTIONS: SettingsSectionItem[] = [
+  { id: "profile", title: "Profile", tab: "profile", icon: User },
+  {
+    id: "appearance",
+    title: "Appearance",
+    tab: "preferences",
+    icon: Palette,
+    keywords: ["theme", "dark", "light", "language"],
+  },
+  {
+    id: "automation",
+    title: "Automation",
+    tab: "preferences",
+    icon: Bot,
+    keywords: ["auto-assign", "routing", "rule"],
+  },
+  { id: "inbox", title: "Inbox", tab: "notifications", icon: Bell },
+  {
+    id: "connected-accounts",
+    title: "Connected accounts",
+    tab: "connections",
+    icon: Github,
+    keywords: ["github", "gitlab", "oauth"],
+  },
+  { id: "api-keys", title: "API keys", tab: "connections", icon: Plug },
+  { id: "plan", title: "Plan", tab: "billing", icon: CreditCard },
+  {
+    id: "two-factor",
+    title: "Two-factor authentication",
+    tab: "danger",
+    icon: Lock,
+    keywords: ["2fa", "mfa", "security"],
+  },
+  {
+    id: "delete-account",
+    title: "Delete my account",
+    tab: "danger",
+    icon: Trash2,
+    keywords: ["danger zone", "remove", "close"],
+  },
+];
 
 /**
  * A real settings screen, assembled only from `SettingsLayout` / `SettingsGroup`
  * / `SettingsRow` / `SettingsListRow`.
  *
  * It is the reference for what "settings built with mangue-ui" looks like: one
- * column, one card per group, one key/value row per option, a hairline between
- * two, and the exceptions (a free-text rule, a danger zone) shown as exceptions
- * rather than left to each author to invent.
+ * card per group, one key/value row per option, a hairline between two, and the
+ * exceptions (a free-text rule, a danger zone) shown as exceptions rather than
+ * left to each author to invent.
+ *
+ * Inside a `<SecondarySidebarProvider>` — which is what the shell around this
+ * page sets up — the tab rail leaves the content column for the SECONDARY
+ * SIDEBAR, full height, left of the header, with a filter over the cards. Drop
+ * the same screen into an app with no second navigation level and it falls back
+ * to the centred column with a rail beside it.
  */
 export function SettingsGallery() {
   // Controlled on purpose: this is the seam where an app plugs `?tab=` in.
@@ -62,6 +117,7 @@ export function SettingsGallery() {
       icon: User,
       content: (
         <SettingsGroup
+          sectionId="profile"
           icon={User}
           title="Profile"
           description="Your name and photo, visible to other members."
@@ -103,6 +159,7 @@ export function SettingsGallery() {
       content: (
         <>
           <SettingsGroup
+            sectionId="appearance"
             icon={Palette}
             title="Appearance"
             description="The language you read the app in, and how it looks."
@@ -141,6 +198,7 @@ export function SettingsGallery() {
           </SettingsGroup>
 
           <SettingsGroup
+            sectionId="automation"
             icon={Bot}
             title="Automation"
             description="What happens on its own, without you asking."
@@ -191,6 +249,7 @@ export function SettingsGallery() {
       indicator: "Two categories are off",
       content: (
         <SettingsGroup
+          sectionId="inbox"
           icon={Bell}
           title="Inbox"
           description="What lands in your inbox. Turning one off never removes what you already received."
@@ -229,6 +288,7 @@ export function SettingsGallery() {
       content: (
         <>
           <SettingsGroup
+            sectionId="connected-accounts"
             icon={Github}
             title="Connected accounts"
             description="Reusable across all your projects."
@@ -260,6 +320,7 @@ export function SettingsGallery() {
           </SettingsGroup>
 
           <SettingsGroup
+            sectionId="api-keys"
             icon={Plug}
             title="API keys"
             description="Server-to-server access, one key per integration."
@@ -275,6 +336,7 @@ export function SettingsGallery() {
       icon: CreditCard,
       content: (
         <SettingsGroup
+          sectionId="plan"
           icon={CreditCard}
           title="Plan"
           description="What you're on, and what it includes."
@@ -303,6 +365,7 @@ export function SettingsGallery() {
       content: (
         <>
           <SettingsGroup
+            sectionId="two-factor"
             icon={Lock}
             title="Two-factor authentication"
             description="A six-digit code on top of your password, every time you sign in."
@@ -325,6 +388,7 @@ export function SettingsGallery() {
           </SettingsGroup>
 
           <SettingsGroup
+            sectionId="delete-account"
             icon={Trash2}
             tone="destructive"
             title="Delete my account"
@@ -350,35 +414,13 @@ export function SettingsGallery() {
   ];
 
   return (
-    <section className="border-t border-border">
-      <div className="mx-auto w-full max-w-[1040px] px-4 pt-10 md:px-8">
-        <h2 className="font-display text-xl font-semibold tracking-tight">
-          Settings
-        </h2>
-        <p className="mt-1 max-w-prose text-sm text-muted-foreground">
-          One card per group, one key/value row per option. Everything below is{" "}
-          <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">
-            SettingsLayout
-          </code>{" "}
-          +{" "}
-          <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">
-            SettingsGroup
-          </code>{" "}
-          +{" "}
-          <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">
-            SettingsRow
-          </code>
-          . Switch tabs to watch the pill slide.
-        </p>
-      </div>
-
-      <SettingsLayout
-        title="Settings"
-        description="Everything about your account, in one column."
-        tabs={tabs}
-        value={tab}
-        onValueChange={setTab}
-      />
-    </section>
+    <SettingsLayout
+      title="Settings"
+      description="Everything about your account, in one column."
+      tabs={tabs}
+      sections={SECTIONS}
+      value={tab}
+      onValueChange={setTab}
+    />
   );
 }

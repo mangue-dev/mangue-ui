@@ -35,6 +35,15 @@ import { HelpHint } from "../ui/help-hint"
  * Every string is a prop — the library ships no i18n.
  */
 
+/**
+ * The DOM id of a settings card, from the id you gave it in the layout's
+ * `sections` catalogue. Prefixed, so a section id can be a plain word ("cadence")
+ * without colliding with anything else on the page.
+ */
+export function settingsSectionAnchor(id: string): string {
+  return `settings-section-${id}`
+}
+
 /** The card: header (icon, title, hint, master control), body, footer. */
 function SettingsGroup({
   icon: Icon,
@@ -46,6 +55,7 @@ function SettingsGroup({
   footer,
   tone = "default",
   variant = "rows",
+  sectionId,
   className,
   children,
 }: {
@@ -66,6 +76,13 @@ function SettingsGroup({
   tone?: "default" | "destructive"
   /** `rows`: `SettingsRow`s separated by a hairline. `block`: free content. */
   variant?: "rows" | "block"
+  /**
+   * Its entry in the layout's `sections` catalogue. That is what makes the card
+   * reachable by name — from the sidebar filter, or from your command palette
+   * via `SettingsLayout`'s `focusSection`: the screen scrolls to it and rings it
+   * for the length of a glance.
+   */
+  sectionId?: string
   className?: string
   children?: React.ReactNode
 }) {
@@ -77,7 +94,11 @@ function SettingsGroup({
   return (
     <section
       data-slot="settings-group"
+      id={sectionId ? settingsSectionAnchor(sectionId) : undefined}
       className={cn(
+        // The ring drawn by `[data-settings-focus]` follows the card's radius,
+        // and `scroll-mt` keeps a scrolled-to card clear of the sticky header.
+        "scroll-mt-6",
         "rounded-xl border bg-card text-card-foreground",
         destructive ? "border-destructive/30" : "border-border",
         className
