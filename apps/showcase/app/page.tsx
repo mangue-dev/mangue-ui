@@ -29,6 +29,8 @@ import {
   AppShell,
   Sidebar,
   SidebarFooterRow,
+  SecondarySidebarProvider,
+  useSidebarState,
   Header,
   SearchCommand,
   MobileNav,
@@ -53,58 +55,34 @@ import {
 } from "mangue-ui";
 
 import { AiGallery } from "./_components/ai-gallery";
+import { InboxGallery } from "./_components/inbox-gallery";
 import { PrimitivesGallery } from "./_components/primitives-gallery";
 import { SettingsGallery } from "./_components/settings-gallery";
-
-const NAV_SECTIONS: NavSection[] = [
-  {
-    label: "Workspace",
-    items: [
-      { key: "inbox", label: "Inbox", icon: Inbox, href: "#inbox", badge: <CountBadge value={8} /> },
-      { key: "my-issues", label: "My Issues", icon: CircleDot, href: "#my-issues" },
-      { key: "views", label: "Views", icon: LayoutGrid, href: "#views" },
-      { key: "cycles", label: "Cycles", icon: GitBranch, href: "#cycles" },
-    ],
-  },
-  {
-    label: "Projects",
-    items: [
-      { key: "mobile", label: "Mobile App", icon: Box, href: "#mobile" },
-      { key: "website", label: "Website", icon: Globe, href: "#website" },
-      { key: "design", label: "Design System", icon: Palette, href: "#design", badge: <Dot /> },
-    ],
-  },
-  {
-    label: "Galleries",
-    items: [
-      { key: "primitives", label: "Primitives", icon: Palette, href: "#primitives" },
-      {
-        key: "ai",
-        label: "AI",
-        icon: Sparkles,
-        href: "#ai",
-        shortcut: "A",
-        badge: <Badge variant="secondary">new</Badge>,
-      },
-    ],
-  },
-  {
-    label: "General",
-    items: [
-      { key: "members", label: "Members", icon: Users, href: "#members" },
-      { key: "settings", label: "Settings", icon: Settings, href: "#settings" },
-    ],
-  },
-];
 
 /** Nav keys that count as "inside a project" — drives the sidebar mode swap. */
 const PROJECT_KEYS = new Set(["mobile", "website", "design"]);
 
+/**
+ * The two keys whose screen mounts a SECONDARY SIDEBAR. Nothing here wires that
+ * up: the screen mounts a `<SecondarySidebar>`, the provider counts it, the
+ * primary sidebar rails itself and the chrome opens the gutter.
+ */
+const SECONDARY_KEYS = new Set(["inbox", "settings"]);
+
 export default function Home() {
+  // Everything about the double sidebar hangs off this provider: it is the
+  // thread between a page's column and the place the chrome keeps for it.
+  return (
+    <SecondarySidebarProvider>
+      <Showcase />
+    </SecondarySidebarProvider>
+  );
+}
+
+function Showcase() {
   const { open, setOpen } = useCommandMenu();
   const { resolvedTheme, toggleTheme } = useTheme();
-  const [activeKey, setActiveKey] = React.useState("inbox");
-  const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
+  const [activeKey, setActiveKey] = React.useState("primitives");
 
   // Holding ⌘ arms the chord: every nav row with a `shortcut` shows its key.
   const [chordArmed, setChordArmed] = React.useState(false);
@@ -144,10 +122,88 @@ export default function Home() {
     }, 900);
   };
 
+  // A gallery anchor: come back to the stacked galleries, then scroll to it.
+  // The shell owns every scroll (its <main> is the scroller), so we move that
+  // one by hand — `scrollIntoView` would walk up past it and scroll the header
+  // out of the window too.
+  const goToGallery = React.useCallback((key: string) => {
+    setActiveKey(key);
+    requestAnimationFrame(() => {
+      const el = document.getElementById(key);
+      const main = el?.closest("main");
+      if (!el || !main) return;
+      const top =
+        main.scrollTop +
+        el.getBoundingClientRect().top -
+        main.getBoundingClientRect().top;
+      main.scrollTo({ top, behavior: "smooth" });
+    });
+  }, []);
+
+  const navSections = React.useMemo<NavSection[]>(
+    () => [
+      {
+        label: "Workspace",
+        items: [
+          {
+            key: "inbox",
+            label: "Inbox",
+            icon: Inbox,
+            onClick: () => setActiveKey("inbox"),
+            badge: <CountBadge value={8} />,
+          },
+          { key: "my-issues", label: "My Issues", icon: CircleDot, href: "#my-issues" },
+          { key: "views", label: "Views", icon: LayoutGrid, href: "#views" },
+          { key: "cycles", label: "Cycles", icon: GitBranch, href: "#cycles" },
+        ],
+      },
+      {
+        label: "Projects",
+        items: [
+          { key: "mobile", label: "Mobile App", icon: Box, href: "#mobile" },
+          { key: "website", label: "Website", icon: Globe, href: "#website" },
+          { key: "design", label: "Design System", icon: Palette, href: "#design", badge: <Dot /> },
+        ],
+      },
+      {
+        label: "Galleries",
+        items: [
+          {
+            key: "primitives",
+            label: "Primitives",
+            icon: Palette,
+            onClick: () => goToGallery("primitives"),
+          },
+          {
+            key: "ai",
+            label: "AI",
+            icon: Sparkles,
+            onClick: () => goToGallery("ai"),
+            shortcut: "A",
+            badge: <Badge variant="secondary">new</Badge>,
+          },
+        ],
+      },
+      {
+        label: "General",
+        items: [
+          { key: "members", label: "Members", icon: Users, href: "#members" },
+          {
+            key: "settings",
+            label: "Settings",
+            icon: Settings,
+            onClick: () => setActiveKey("settings"),
+          },
+        ],
+      },
+    ],
+    [goToGallery],
+  );
+
   const commandGroups = [
     {
       heading: "Navigation",
-      items: NAV_SECTIONS.flatMap((section) =>
+      items: navSections.flatMap((section) =>
         section.items.map((item) => ({
           key: item.key,
           label: item.label,
@@ -171,20 +227,25 @@ export default function Home() {
     },
   ];
 
-  const activeItem = NAV_SECTIONS.flatMap((s) => s.items).find((i) => i.key === activeKey);
+  const activeItem = navSections.flatMap((s) => s.items).find((i) => i.key === activeKey);
   const activeLabel = activeItem?.label ?? "Inbox";
+  const secondaryScreen = SECONDARY_KEYS.has(activeKey);
 
   return (
     <AppShell
       sidebar={
         <Sidebar
-          sections={NAV_SECTIONS}
+          sections={navSections}
           activeKey={activeKey}
           linkComponent={Link}
           header={<Brand />}
-          // Collapsed, the mark takes the reopen button's place and cross-fades
-          // to it on hover — the whole square is the expand button.
+          // What the rail shows in the brand's place; the two cross-fade as the
+          // bar unfolds.
           collapsedBrand={<BrandMark />}
+          // No `overlay` prop: the bar follows the provider above it. Open Inbox
+          // or Settings and it rails itself, unfolding over the second column on
+          // hover without shifting anything.
+          //
           // Changing this replays the nav's animated swap. Here it flips when
           // you enter the "Projects" area, so the demo shows the effect.
           modeKey={PROJECT_KEYS.has(activeKey) ? "project" : "root"}
@@ -200,31 +261,25 @@ export default function Home() {
           }}
           footer={
             <div className="flex flex-col gap-0.5">
-              <SidebarFooterRow
-                icon={Trash2}
-                label="Trash"
-                collapsed={sidebarCollapsed}
-                onClick={() => toast("Trash")}
-              />
+              {/* No `collapsed` prop: footer rows read the bar's state from
+                  context, so they follow the rail on their own. */}
+              <SidebarFooterRow icon={Trash2} label="Trash" onClick={() => toast("Trash")} />
               <SidebarFooterRow
                 icon={Megaphone}
                 label="Share feedback"
-                collapsed={sidebarCollapsed}
                 trailingIcon={ArrowUpRight}
                 onClick={() => toast("Feedback")}
               />
-              <UserMenu collapsed={sidebarCollapsed} />
+              <UserMenu />
             </div>
           }
-          collapsed={sidebarCollapsed}
-          onCollapsedChange={setSidebarCollapsed}
         />
       }
       header={
         <Header
           linkComponent={Link}
           breadcrumb={[
-            { key: "workspace", label: "Workspace", onClick: () => setActiveKey("inbox") },
+            { key: "workspace", label: "Workspace", onClick: () => setActiveKey("primitives") },
             { key: activeKey, label: activeLabel, icon: activeItem?.icon },
           ]}
           right={
@@ -245,7 +300,7 @@ export default function Home() {
       }
       mobileNav={
         <MobileNav
-          sections={NAV_SECTIONS}
+          sections={navSections}
           commandGroups={commandGroups}
           activeKey={activeKey}
           linkComponent={Link}
@@ -255,20 +310,29 @@ export default function Home() {
         />
       }
     >
-      <div id="primitives">
-        <PrimitivesGallery />
-      </div>
-      <div id="ai">
-        <AiGallery />
-      </div>
-      <div id="settings">
+      {/* The two screens with a second navigation level take the whole shell:
+          their column is teleported next to the primary sidebar, and what is
+          left here is the detail. */}
+      {activeKey === "inbox" ? (
+        <InboxGallery />
+      ) : activeKey === "settings" ? (
         <SettingsGallery />
-      </div>
+      ) : (
+        <>
+          <div id="primitives">
+            <PrimitivesGallery />
+          </div>
+          <div id="ai">
+            <AiGallery />
+          </div>
+        </>
+      )}
 
       <CommandMenu open={open} onOpenChange={setOpen} groups={commandGroups} />
 
-      {/* Floating assistant panel (Numo) */}
-      {chatOpen ? (
+      {/* Floating assistant panel (Numo) — stays out of the way of a screen that
+          already has two navigation columns. */}
+      {chatOpen && !secondaryScreen ? (
         <div className="fixed right-4 bottom-4 z-40 hidden h-[70vh] max-h-[640px] w-[380px] desktop:block">
           <div className="relative h-full">
             <Button
@@ -316,9 +380,13 @@ function BrandMark() {
   );
 }
 
-function UserMenu({ collapsed = false }: { collapsed?: boolean }) {
+function UserMenu() {
+  // Reads the bar it sits in: folded or not, and — in rail mode — whether one of
+  // its own menus is open. A dropdown opens in a portal, OUTSIDE the bar, so
+  // moving into it would count as leaving and fold the rail under the menu.
+  const { collapsed, setMenuOpen } = useSidebarState();
   return (
-    <DropdownMenu>
+    <DropdownMenu onOpenChange={setMenuOpen}>
       <DropdownMenuTrigger asChild>
         <button
           className={

@@ -12,7 +12,9 @@ It ships four layers:
    dropdown, select, command palette, sheet, tooltip, `Field`, …), copied
    verbatim from project and **fully decoupled** from any project business logic.
 3. **App shell** — decoupled, props-driven `Sidebar`, `Header`, `CommandMenu`,
-   `MobileNav`, `AppShell`, plus a presentational `NumoChat` panel.
+   `MobileNav`, `AppShell`, plus a presentational `NumoChat` panel. Two levels of
+   navigation are built in: the primary sidebar, and a **secondary sidebar** a
+   page mounts for itself (see below).
 4. **Settings screens** — `SettingsLayout`, `SettingsGroup`, `SettingsRow`,
    `SettingsListRow`: the grammar that turns the primitives into a settings page
    that reads the same on every tab (see below).
@@ -102,6 +104,108 @@ derive from it. Optionally tune `--brand` / `--accent-glow` to match.
 
 ---
 
+## Double sidebar
+
+Some screens are a *list and a detail*: pull requests, an inbox, agent sessions,
+settings. Their list is a **second level of navigation**, not a piece of the
+content — so it belongs beside the primary sidebar, full height, left of the
+header, and the breadcrumb starts after it just as it starts after the primary
+one.
+
+That column is written **inside the page** (next to the selection state that
+drives the detail) and displayed **in the chrome**. A portal is what lets it
+change place in the DOM without leaving its component: selection, filters and
+queries stay where you read them.
+
+```tsx
+// 1. One provider above the shell.
+<SecondarySidebarProvider reserve={routeHasSecondaryNav(pathname)}>
+  <AppShell sidebar={<Sidebar sections={sections} />} header={<Header … />}>
+    {children}
+  </AppShell>
+</SecondarySidebarProvider>
+```
+
+```tsx
+// 2. Any page mounts its column. Nothing else to wire.
+export function PullRequestsPage() {
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState<PullRequest | null>(null);
+
+  return (
+    <div className="flex h-full min-h-0">
+      <SecondarySidebar
+        title="Pull requests"
+        hiddenOnMobile={!!selected}
+        filter={{
+          value: query,
+          onChange: setQuery,
+          placeholder: `Filter ${rows.length} pull requests…`,
+        }}
+      >
+        {rows.filter((r) => matchesFilter(query, [r.title, r.branch])).map(…)}
+      </SecondarySidebar>
+      <Detail pr={selected} />
+    </div>
+  );
+}
+```
+
+**What mounting it does, for free**
+
+- The **primary sidebar rails itself**: it keeps only its 56px of icons in the
+  flow and unfolds *over* the second column on hover (or when keyboard focus
+  enters), without shifting anything. The layout of a two-sidebar page is the
+  same whether the primary is open or not.
+- The chrome **opens a 320px gutter** on the same curve as the sidebar's width
+  (`transitions.shell`), so the header, breadcrumb and content glide as one block
+  instead of jumping.
+- The title row is the height of the header and carries the same bottom border:
+  **one horizontal line crosses the app**, edge to edge.
+- Below `desktop` (1200px) none of it applies: the column stays where it is
+  written — a page column from `md` up, the whole page below, with
+  `hiddenOnMobile` yielding it to the detail.
+
+**The rail is the only fold.** There is no button to fold the sidebar by hand and
+no ⌘B: it exists where a second column needs the room, and everywhere else the
+bar is simply open. A manual fold on top of it meant two folded bars for two
+different reasons, one of which you had to know a shortcut to undo — so `Sidebar`
+takes no `collapsible` / `collapsed` / `defaultCollapsed` / `onCollapsedChange`
+at all. `collapsedBrand` stays: it is what the rail shows in the brand's place,
+the two cross-fading as the bar unfolds.
+
+**`reserve`** is the only thing your router has to answer: "does this route mount
+one?", before hydration. Without it the server HTML ships with the primary
+expanded and the content full width, and re-lays everything out at hydration. It
+does not have to be exact — a forgotten route costs one re-layout on first paint,
+not a bug.
+
+**The title row commands the column, it does not name it.** The name is already
+in the breadcrumb, 340px to the right; what belongs here is the filter, what
+narrows the list, and what can be created in it. `filter` is passed as *data*
+rather than as a node so every such screen offers the same gesture, in the same
+place, with the same look — and the item count goes in the placeholder, not in a
+counter beside it. `/` focuses it from anywhere on the page.
+
+**Footer pieces read the bar's state.** `SidebarFooterRow` folds on its own; a
+custom row calls `useSidebarState()` for `collapsed`, and any dropdown in the
+footer must report itself through `setMenuOpen` — a menu opens in a portal,
+*outside* the bar, so moving into it would otherwise count as leaving and fold
+the rail under the menu it just opened.
+
+```tsx
+const { collapsed, setMenuOpen } = useSidebarState();
+<DropdownMenu onOpenChange={setMenuOpen}>…</DropdownMenu>
+```
+
+**Route skeletons must mount a real `<SecondarySidebar>`** (with no `title`),
+not a column that looks like one: mounting it is what rails the primary. Without
+it, navigating to such a screen unfolds the primary and closes the gutter for the
+length of the load, only to reopen everything on arrival — a 376px round trip
+across the whole right half of the screen.
+
+---
+
 ## Settings screens
 
 Primitives alone don't make a settings screen. Given a `Switch` and a `Select`,
@@ -113,10 +217,18 @@ the same**.
 Three levels, each of them marked:
 
 ```
-Page title        text-2xl font-display          "Settings"
-└─ Group (card)   text-sm font-medium + icon     "Appearance"
+Screen title      the secondary sidebar's title row   "Settings"
+└─ Group (card)   text-sm font-medium + icon          "Appearance"
    └─ Row         label left · control right, hairline between two
 ```
+
+**Two shapes, one screen.** Inside a `<SecondarySidebarProvider>`, the tab rail
+leaves the content column for the [secondary sidebar](#double-sidebar) — full
+height, left of the header, with a filter over the cards, exactly like every
+other list-and-detail screen; the title becomes that pane's title row, so it no
+longer doubles the breadcrumb above the cards. With no such provider it falls
+back to the centred column with a sticky rail beside it. `variant` forces either
+(`"sidebar"` / `"inline"`); the default `"auto"` reads the chrome.
 
 ```tsx
 import {
@@ -185,12 +297,42 @@ const params = useSearchParams();          // wrap in <Suspense> if prerendered
 />
 ```
 
-`SettingsLayoutSkeleton` renders the same grid (rail + cards) for your route's
-loading state, so the page doesn't jump when it resolves.
+`SettingsLayoutSkeleton` renders the same shape (rail + cards) for your route's
+loading state, so the page doesn't jump when it resolves — and in the `sidebar`
+shape it mounts a real `<SecondarySidebar>`, which is what holds the primary at
+the rail while the screen loads.
 
-The showcase renders a full six-tab settings screen at `#settings`
-(`apps/showcase/app/_components/settings-gallery.tsx`) — the reference for what
-this is supposed to look like.
+**Reaching one card by name.** A tab answers "where is it?", but what people type
+is the name of the *card* — "cadence", "danger zone", "act on your behalf" — and
+none of those is a tab. Give the layout a `sections` catalogue and the rail's
+filter searches cards instead of tabs: picking one opens the right tab, scrolls
+to the card and rings it for the length of a glance. The ids match the
+`sectionId` of your groups, and `focusSection` lets your command palette do the
+same from anywhere (wire your `?section=` to it, and drop the param in
+`onSectionFocused` — it is consumed on read).
+
+```tsx
+const sections: SettingsSectionItem[] = [
+  { id: "appearance", title: "Appearance", tab: "preferences", icon: Palette,
+    keywords: ["theme", "dark", "language"] },
+];
+
+<SettingsGroup sectionId="appearance" icon={Palette} title="Appearance" …>
+
+<SettingsLayout
+  tabs={tabs}
+  sections={sections}
+  focusSection={params.get("section")}
+  onSectionFocused={() => router.replace(pathname, { scroll: false })}
+/>
+```
+
+Without a catalogue the filter still works — it falls back to the tabs
+themselves.
+
+The showcase renders a full six-tab settings screen behind the sidebar's
+"Settings" entry (`apps/showcase/app/_components/settings-gallery.tsx`) — the
+reference for what this is supposed to look like.
 
 ---
 
@@ -201,6 +343,8 @@ The shell uses a single canonical breakpoint, `desktop` = **1200px**
 (<1200px) Tailwind variants.
 
 - `AppShell` shows the `Sidebar` only ≥1200px and the `MobileNav` below it.
+- A `SecondarySidebar` is only hoisted into the chrome ≥1200px; below it, it
+  renders in place — a 320px page column from `md` up, the whole page below.
 - `Dialog`, `AlertDialog` and `DropdownMenu` automatically become bottom drawers
   on small screens (via the `useMediaQuery` hook baked into those primitives).
 

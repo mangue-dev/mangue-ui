@@ -82,7 +82,12 @@ export * from "./components/settings/settings-group";
 export * from "./components/settings/settings-layout";
 
 // ── App shell (decoupled) ──────────────────────────────────────────────────
+// Two levels of navigation: the primary sidebar, always there, and a SECONDARY
+// one a page mounts for itself (a list of pull requests, of settings sections).
+// Mounting one rails the primary — see the README, "Double sidebar".
 export * from "./components/shell/types";
+export * from "./components/shell/secondary-sidebar";
+export * from "./components/shell/sidebar-filter-field";
 export * from "./components/shell/sidebar";
 export * from "./components/shell/header";
 export * from "./components/shell/command-menu";
