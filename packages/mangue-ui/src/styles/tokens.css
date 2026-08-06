@@ -416,20 +416,26 @@ html {
 
 /* Text shimmer — the "this is running" signal of the AI surfaces (ToolCallList's
    in-flight action, WorkAccordion's header). A bright band sweeps across dimmed
-   text.
+   text, IN READING ORDER — left to right.
+
+   That direction is a sign, not a duration, and it is easy to get backwards.
+   With `background-size: 300%`, a `background-position` of X% offsets the image
+   by (width − 3×width)·X — i.e. LEFTWARDS as X grows. So the bright band (at
+   50% of the gradient) sits 1.5×width to the RIGHT of the text at 0%, and
+   0.5×width to the left at 100%. Sweeping with the text therefore means going
+   from 100% to 0%, not the other way round: 0%→100% enters from the right and
+   reads against the text, which is instantly noticeable.
 
    The gradient is THREE times wider than the text (300%) with no-repeat, and
-   that is not cosmetic — it is what makes the loop seamless. At 200% the bright
-   band (sitting at 50% of the gradient) lands on the right edge at position 0%
-   and on the left edge at 100%: half-visible at BOTH ends, so every lap it
-   teleported from left to right. At 300% the band is off the text at both ends
-   (1.5×width to the right at the start, −0.5×width to the left at the end), so
-   the two extremes look IDENTICAL (uniformly dimmed text) and the seam is
-   invisible. The short breath between passes is intended. At any position the
-   image still covers the whole text — no transparent gap. */
+   that is not cosmetic either — it is what makes the loop seamless. At 200% the
+   band lands on one edge at each extreme: half-visible at BOTH ends, so every
+   lap it teleported across. At 300% it is off the text at both ends, so the two
+   extremes look IDENTICAL (uniformly dimmed text) and the seam is invisible.
+   The short breath between passes is intended. At any position the image still
+   covers the whole text — no transparent gap. */
 @keyframes text-shimmer {
-  from { background-position: 0% center; }
-  to { background-position: 100% center; }
+  from { background-position: 100% center; }
+  to { background-position: 0% center; }
 }
 
 @utility text-shimmer {
