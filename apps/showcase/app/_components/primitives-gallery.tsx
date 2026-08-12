@@ -610,13 +610,13 @@ export function PrimitivesGallery() {
                 <TabsTrigger value="activity">Activity</TabsTrigger>
                 <TabsTrigger value="settings">Settings</TabsTrigger>
               </TabsList>
-              <TabsContent value="overview" className="pt-3 text-muted-foreground">
+              <TabsContent value="overview" className="text-muted-foreground">
                 A snapshot of the project — status, owners and recent changes.
               </TabsContent>
-              <TabsContent value="activity" className="pt-3 text-muted-foreground">
+              <TabsContent value="activity" className="text-muted-foreground">
                 Every commit, comment and deploy in chronological order.
               </TabsContent>
-              <TabsContent value="settings" className="pt-3 text-muted-foreground">
+              <TabsContent value="settings" className="text-muted-foreground">
                 Rename, transfer or archive this project.
               </TabsContent>
             </Tabs>

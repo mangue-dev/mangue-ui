@@ -16,7 +16,7 @@ function Tabs({
       data-slot="tabs"
       data-orientation={orientation}
       className={cn(
-        "group/tabs flex gap-2 data-horizontal:flex-col",
+        "group/tabs flex gap-3 data-horizontal:flex-col",
         className
       )}
       {...props}
@@ -25,12 +25,13 @@ function Tabs({
 }
 
 const tabsListVariants = cva(
-  "group/tabs-list inline-flex w-fit items-center justify-center rounded-lg p-[3px] text-muted-foreground group-data-horizontal/tabs:h-8 group-data-vertical/tabs:h-fit group-data-vertical/tabs:flex-col data-[variant=line]:rounded-none",
+  "group/tabs-list relative isolate inline-flex w-fit items-center justify-center gap-1 text-muted-foreground group-data-vertical/tabs:h-fit group-data-vertical/tabs:flex-col group-data-vertical/tabs:items-stretch",
   {
     variants: {
       variant: {
-        default: "bg-muted",
-        line: "gap-1 bg-transparent",
+        default:
+          "rounded-full bg-muted p-1 group-data-horizontal/tabs:h-11 group-data-vertical/tabs:rounded-2xl dark:bg-muted/60",
+        line: "bg-transparent group-data-horizontal/tabs:h-10",
       },
     },
     defaultVariants: {
@@ -39,19 +40,119 @@ const tabsListVariants = cva(
   }
 )
 
+const tabsIndicatorVariants = cva(
+  "pointer-events-none absolute top-0 left-0 -z-10 will-change-transform motion-reduce:transition-none",
+  {
+    variants: {
+      variant: {
+        default:
+          "rounded-full border border-transparent bg-background shadow-sm dark:border-input dark:bg-control",
+        line: "after:absolute after:rounded-full after:bg-foreground group-data-horizontal/tabs:after:inset-x-2 group-data-horizontal/tabs:after:-bottom-1 group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-1.5 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+)
+
+const ACTIVE_TRIGGER_SELECTOR =
+  '[data-slot="tabs-trigger"][data-state="active"], [data-slot="tabs-trigger"][data-active]'
+
+type IndicatorRect = { left: number; top: number; width: number; height: number }
+
 function TabsList({
   className,
   variant = "default",
+  children,
   ...props
 }: React.ComponentProps<typeof TabsPrimitive.List> &
   VariantProps<typeof tabsListVariants>) {
+  const listRef = React.useRef<HTMLDivElement>(null)
+  const measuredOnce = React.useRef(false)
+  const [rect, setRect] = React.useState<IndicatorRect | null>(null)
+  const [animated, setAnimated] = React.useState(false)
+
+  React.useEffect(() => {
+    const list = listRef.current
+    if (!list) return
+
+    let frame = 0
+
+    const measure = () => {
+      const active = list.querySelector<HTMLElement>(ACTIVE_TRIGGER_SELECTOR)
+      if (!active) {
+        setRect(null)
+        return
+      }
+      setRect({
+        left: active.offsetLeft,
+        top: active.offsetTop,
+        width: active.offsetWidth,
+        height: active.offsetHeight,
+      })
+      // Let the first position land without a transition, so the indicator
+      // fades in where it belongs instead of flying in from the corner.
+      if (!measuredOnce.current) {
+        measuredOnce.current = true
+        requestAnimationFrame(() => setAnimated(true))
+      }
+    }
+
+    const schedule = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(measure)
+    }
+
+    schedule()
+
+    const mutations = new MutationObserver(schedule)
+    mutations.observe(list, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ["data-state", "data-active", "dir"],
+    })
+
+    const resizes = new ResizeObserver(schedule)
+    resizes.observe(list)
+    for (const trigger of list.querySelectorAll('[data-slot="tabs-trigger"]')) {
+      resizes.observe(trigger)
+    }
+
+    return () => {
+      cancelAnimationFrame(frame)
+      mutations.disconnect()
+      resizes.disconnect()
+    }
+  }, [])
+
   return (
     <TabsPrimitive.List
+      ref={listRef}
       data-slot="tabs-list"
       data-variant={variant}
       className={cn(tabsListVariants({ variant }), className)}
       {...props}
-    />
+    >
+      <span
+        aria-hidden="true"
+        data-slot="tabs-indicator"
+        className={cn(
+          tabsIndicatorVariants({ variant }),
+          rect ? "opacity-100" : "opacity-0",
+          animated
+            ? "transition-[transform,width,height,opacity] duration-200 ease-out"
+            : "transition-[opacity] duration-150 ease-out"
+        )}
+        style={{
+          transform: `translate3d(${rect?.left ?? 0}px, ${rect?.top ?? 0}px, 0)`,
+          width: rect?.width ?? 0,
+          height: rect?.height ?? 0,
+        }}
+      />
+      {children}
+    </TabsPrimitive.List>
   )
 }
 
@@ -63,10 +164,10 @@ function TabsTrigger({
     <TabsPrimitive.Trigger
       data-slot="tabs-trigger"
       className={cn(
-        "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-sm font-medium whitespace-nowrap text-foreground/60 transition-all group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        "group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent",
-        "data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-control dark:data-active:text-foreground",
-        "after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100",
+        "relative inline-flex flex-1 shrink-0 items-center justify-center gap-2 rounded-full border border-transparent bg-clip-padding px-4 text-sm font-medium whitespace-nowrap text-foreground/60 transition-all outline-none select-none group-data-horizontal/tabs:h-full group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:py-2 hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "data-active:text-foreground dark:data-active:text-foreground",
+        "group-data-[variant=default]/tabs-list:not-data-active:hover:bg-foreground/5",
+        "group-data-[variant=line]/tabs-list:rounded-lg group-data-[variant=line]/tabs-list:not-data-active:hover:bg-muted/60",
         className
       )}
       {...props}
