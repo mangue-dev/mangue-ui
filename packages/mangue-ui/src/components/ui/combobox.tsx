@@ -273,8 +273,11 @@ export function Combobox({
       </PopoverTrigger>
       <PopoverContent
         align="start"
+        // rounded-xl, not the popover's default rounded-lg: <Command> forces
+        // its own rounded-xl and it is what paints this surface. 20px outer,
+        // 8px inset (see CommandList below), 12px rows — concentric.
         className={cn(
-          "p-0",
+          "rounded-xl p-0",
           variant === "compact"
             ? "w-80"
             : "w-[var(--radix-popover-trigger-width)]",
@@ -289,9 +292,12 @@ export function Combobox({
               placeholder={searchPlaceholder}
             />
           ) : null}
-          {/* mt-1.5 breathes under the input; px-1 lines the options up with
-              the search field (same 8px inset from the edges). */}
-          <CommandList className="mt-1.5 px-1">
+          {/* p-1, not px-1: on top of <Command>'s own p-1 that makes the SAME
+              8px inset on all four sides — which is what keeps the rows'
+              12px radius concentric with the popover's 20px. A horizontal-only
+              padding left the last row 4px from the bottom edge and 8px from
+              the sides, and no radius pairing can be right under that. */}
+          <CommandList className="p-1">
             {defaultOption
               ? renderRow(
                   { ...defaultOption, value: "__default__" },

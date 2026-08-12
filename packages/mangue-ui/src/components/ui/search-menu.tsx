@@ -119,7 +119,10 @@ export function SearchMenu({
     <PopoverContent
       align={align}
       container={container}
-      className={cn("w-60 overflow-hidden p-0", contentClassName)}
+      // rounded-xl for the same reason as Combobox: <Command> paints this
+      // surface at 20px, rows sit 8px in (Command's p-1 + CommandGroup's p-1)
+      // and carry 12px — 20 − 8 = 12, concentric.
+      className={cn("w-60 overflow-hidden rounded-xl p-0", contentClassName)}
       onClick={stop}
       onPointerDown={stop}
     >
