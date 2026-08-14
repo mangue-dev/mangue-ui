@@ -17,10 +17,20 @@ const DropdownSubInlineContext = React.createContext<{
   setOpen: (open: boolean) => void
 } | null>(null)
 
+// `modal={false}` by default: the modal mode locks scroll on <body> and marks
+// the rest of the page aria-hidden / pointer-events-none, which breaks scrolling
+// behind the menu and layout (scrollbar-gone jump). Pass modal to opt back in.
 function DropdownMenu({
+  modal = false,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) {
-  return <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />
+  return (
+    <DropdownMenuPrimitive.Root
+      data-slot="dropdown-menu"
+      modal={modal}
+      {...props}
+    />
+  )
 }
 
 function DropdownMenuPortal({
