@@ -1,12 +1,7 @@
 "use client"
 
 import { Textarea } from "./textarea"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./tooltip"
+import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip"
 import { cn } from "../../lib/utils"
 import React, {
   createContext,
@@ -77,31 +72,29 @@ function PromptInput({
   }
 
   return (
-    <TooltipProvider>
-      <PromptInputContext.Provider
-        value={{
-          isLoading,
-          value: value ?? internalValue,
-          setValue: onValueChange ?? handleChange,
-          maxHeight,
-          onSubmit,
-          disabled,
-          textareaRef,
-        }}
+    <PromptInputContext.Provider
+      value={{
+        isLoading,
+        value: value ?? internalValue,
+        setValue: onValueChange ?? handleChange,
+        maxHeight,
+        onSubmit,
+        disabled,
+        textareaRef,
+      }}
+    >
+      <div
+        onClick={handleClick}
+        className={cn(
+          "border-input bg-background cursor-text rounded-3xl border p-2 shadow-xs",
+          disabled && "cursor-not-allowed opacity-60",
+          className
+        )}
+        {...props}
       >
-        <div
-          onClick={handleClick}
-          className={cn(
-            "border-input bg-background cursor-text rounded-3xl border p-2 shadow-xs",
-            disabled && "cursor-not-allowed opacity-60",
-            className
-          )}
-          {...props}
-        >
-          {children}
-        </div>
-      </PromptInputContext.Provider>
-    </TooltipProvider>
+        {children}
+      </div>
+    </PromptInputContext.Provider>
   )
 }
 

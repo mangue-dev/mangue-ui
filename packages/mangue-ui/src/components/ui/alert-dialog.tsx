@@ -58,7 +58,8 @@ function AlertDialogOverlay({
       // Tap the scrim above the sheet to dismiss (sheet mode only).
       onClick={sheet ? () => onOpenChange?.(false) : undefined}
       className={cn(
-        "fixed inset-0 z-50 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 max-[479px]:bg-black/40 max-[479px]:supports-backdrop-filter:backdrop-blur-none",
+        // No `backdrop-filter` — see the note on SidePanelOverlay.
+        "fixed inset-0 z-50 bg-black/10 duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 max-[479px]:bg-black/40",
         className
       )}
       {...props}

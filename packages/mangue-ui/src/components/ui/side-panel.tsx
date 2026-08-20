@@ -90,8 +90,11 @@ function SidePanelOverlay({
           : undefined
       }
       className={cn(
-        "fixed inset-0 isolate z-50 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
-        drawer && "bg-black/40 supports-backdrop-filter:backdrop-blur-none",
+        // No `backdrop-filter`: a full-viewport blur re-composites the page on
+        // every frame something moves behind the scrim, and under 10 % black
+        // nobody sees it. The tint alone costs nothing per repaint.
+        "fixed inset-0 isolate z-50 bg-black/10 duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+        drawer && "bg-black/40",
         className
       )}
       {...props}

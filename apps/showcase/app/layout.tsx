@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk, Instrument_Serif } from "next/font/google";
-import { ThemeProvider, Toaster } from "mangue-ui";
+import { ThemeProvider, Toaster, TooltipProvider } from "mangue-ui";
 import "./globals.css";
 
 const inter = Inter({
@@ -38,8 +38,10 @@ export default function RootLayout({
         className={`${inter.variable} ${spaceGrotesk.variable} ${instrumentSerif.variable} antialiased`}
       >
         <ThemeProvider defaultTheme="dark">
-          {children}
-          <Toaster />
+          <TooltipProvider>
+            {children}
+            <Toaster />
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>

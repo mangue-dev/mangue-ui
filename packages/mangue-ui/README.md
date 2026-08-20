@@ -43,11 +43,12 @@ This file is *yours*: override any token and reuse them in your own styles.
 ```
 
 **3. `app/layout.tsx`** — provide the three font variables and wrap in the theme
-provider:
+provider **and a single `TooltipProvider`** (required: every `Tooltip` reads it,
+and it is what makes the second tooltip open without re-paying the delay):
 
 ```tsx
 import { Inter, Space_Grotesk, Instrument_Serif } from "next/font/google";
-import { ThemeProvider } from "mangue-ui";
+import { ThemeProvider, TooltipProvider } from "mangue-ui";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const spaceGrotesk = Space_Grotesk({ variable: "--font-space-grotesk", subsets: ["latin"] });
@@ -57,12 +58,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${spaceGrotesk.variable} ${instrumentSerif.variable} antialiased`}>
-        <ThemeProvider defaultTheme="dark">{children}</ThemeProvider>
+        <ThemeProvider defaultTheme="dark">
+          <TooltipProvider>{children}</TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
 }
 ```
+
+### Upgrading to 0.7 — mount the root `TooltipProvider`
+
+Until 0.6, `<Tooltip>` mounted its own provider. That made Radix's skip-delay
+(once one tooltip is open, the next ones show instantly) impossible — it is
+scoped to a provider, and each tooltip had its own — and mounted one provider
+per tooltip on dense lists. The provider now belongs to the host app, once, as
+in step 3 above. A `Tooltip` with no provider above it throws an explicit Radix
+error on render, so anything missed shows up immediately.
 
 ## Use
 

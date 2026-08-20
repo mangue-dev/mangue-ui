@@ -1,6 +1,6 @@
 {
   "name": "mangue-ui",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Design system and component library extracted from project: radix-nova shadcn primitives, a decoupled app shell (sidebar / header / command menu), an AI chat panel, and OKLch design tokens.",
   "keywords": [
     "react",
@@ -41,7 +41,10 @@
     "./styles/tokens.css": "./src/styles/tokens.css",
     "./package.json": "./package.json",
     "./*": {
-      "types": ["./src/*.tsx", "./src/*.ts"],
+      "types": [
+        "./src/*.tsx",
+        "./src/*.ts"
+      ],
       "default": "./src/*"
     }
   },

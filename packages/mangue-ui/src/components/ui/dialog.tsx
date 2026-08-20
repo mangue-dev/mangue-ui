@@ -86,8 +86,10 @@ function DialogOverlay({
           : undefined
       }
       className={cn(
-        "fixed inset-0 isolate z-50 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
-        drawer && "bg-black/40 supports-backdrop-filter:backdrop-blur-none",
+        // No `backdrop-filter` — see the note on SidePanelOverlay: a viewport-wide
+        // blur repaints every frame, and under 10 % black it is invisible.
+        "fixed inset-0 isolate z-50 bg-black/10 duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+        drawer && "bg-black/40",
         className
       )}
       {...props}

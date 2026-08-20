@@ -18,14 +18,22 @@ function TooltipProvider({
   )
 }
 
+/**
+ * `Tooltip` mounts NO provider of its own: the host app mounts a single
+ * `TooltipProvider` at its root.
+ *
+ * Radix's skip-delay — once one tooltip is open, the next ones appear
+ * instantly — is scoped to a provider. One provider per tooltip means every
+ * hover pays the full delay again, so the behaviour we thought we shipped
+ * never existed. It also mounted 8–10 providers per card on a dense board.
+ *
+ * A tooltip left without a provider above it makes Radix throw an explicit
+ * error, so a missing root provider surfaces on the first render, not silently.
+ */
 function Tooltip({
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Root>) {
-  return (
-    <TooltipProvider>
-      <TooltipPrimitive.Root data-slot="tooltip" {...props} />
-    </TooltipProvider>
-  )
+  return <TooltipPrimitive.Root data-slot="tooltip" {...props} />
 }
 
 /**
