@@ -26,7 +26,7 @@ const instrumentSerif = Instrument_Serif({
 export const metadata: Metadata = {
   title: "mangue-ui — component library",
   description:
-    "project's design system, extracted into a reusable library: radix-nova primitives, a decoupled app shell, and OKLch design tokens.",
+    "A reusable design system: radix-nova primitives, a decoupled app shell, and OKLch design tokens.",
 };
 
 export default function RootLayout({

@@ -1,6 +1,6 @@
 # mangue-ui
 
-A reusable component library extracted from **project**'s design system: OKLch
+A reusable component library: OKLch
 design tokens, radix-nova / shadcn primitives, a decoupled app shell (sidebar /
 header / command menu / mobile nav), a responsive `SidePanel`, and a full set of
 **AI surfaces** (agent composer, animated beam, tool-call trace, model pickers,

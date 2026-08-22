@@ -32,8 +32,7 @@ export function useIsMobile(): boolean {
 }
 
 /**
- * project's app UI is wide and starts breaking below 1200px. This is the
- * canonical breakpoint for all mobile-layout adaptations (AUT-257), matching
+ * The canonical breakpoint for all mobile-layout adaptations, matching
  * the Tailwind `max-desktop:` variant (`--breakpoint-desktop: 1200px`).
  */
 export function useIsMobileLayout(): boolean {

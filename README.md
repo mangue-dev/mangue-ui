@@ -1,16 +1,16 @@
 # mangue-ui
 
-A reusable component library extracted from **project**'s design system, so you
+A reusable component library, so you
 can spin up a new product (a Linear-style ticketing app, a dashboard, anything)
-that looks and feels like project in minutes.
+with a coherent design system in minutes.
 
 It ships four layers:
 
 1. **Design tokens** — the full OKLch color system (light + dark), radius, fonts,
    spacing and breakpoints, as Tailwind v4 `@theme` variables.
 2. **Primitives** — the radix-nova / shadcn components (button, dialog,
-   dropdown, select, command palette, sheet, tooltip, `Field`, …), copied
-   verbatim from project and **fully decoupled** from any project business logic.
+   dropdown, select, command palette, sheet, tooltip, `Field`, …), **fully
+   decoupled** from any business logic.
 3. **App shell** — decoupled, props-driven `Sidebar`, `Header`, `CommandMenu`,
    `MobileNav`, `AppShell`, plus a presentational `NumoChat` panel. Two levels of
    navigation are built in: the primary sidebar, and a **secondary sidebar** a
@@ -19,7 +19,7 @@ It ships four layers:
    `SettingsListRow`: the grammar that turns the primitives into a settings page
    that reads the same on every tab (see below).
 
-There is **zero project logic** in here (no Supabase, no project context, no
+There is **zero business logic** in here (no database, no project context, no
 capture engine). Everything is data/props in, UI out.
 
 ---
@@ -33,7 +33,7 @@ mangue-ui/
 │       ├── src/
 │       │   ├── styles/tokens.css     ← design tokens (@theme + :root/.dark)
 │       │   ├── lib/                  ← cn(), motion presets, media-query hooks
-│       │   ├── components/ui/         ← 46 primitives (verbatim from project)
+│       │   ├── components/ui/         ← 46 primitives
 │       │   ├── components/shell/      ← Sidebar, Header, CommandMenu, AppShell…
 │       │   ├── components/theme-provider.tsx
 │       │   ├── chat/numo-chat.tsx     ← AI chat panel (presentational)
@@ -95,7 +95,7 @@ The whole library recolors from **one variable**. In
 (one in `:root`, one in `.dark`):
 
 ```css
-:root { --primary: oklch(0.62 0.22 265); }   /* project blue */
+:root { --primary: oklch(0.62 0.22 265); }   /* default blue */
 .dark { --primary: oklch(0.64 0.22 265); }
 ```
 
@@ -350,35 +350,6 @@ The shell uses a single canonical breakpoint, `desktop` = **1200px**
 
 ---
 
-## Publishing
-
-The library is on npm as [`mangue-ui`](https://www.npmjs.com/package/mangue-ui).
-It ships **TypeScript/TSX source, with no build step**: `files` is `["src"]` and
-`exports` points straight at it. The host app's bundler compiles it (Next needs
-`transpilePackages: ["mangue-ui"]`) and Tailwind scans it, which is what keeps
-the tokens overridable. Nothing to build, nothing to keep in sync with a `dist/`.
-
-```bash
-npm login                       # once — the stored token expires
-npm run typecheck               # what prepublishOnly will run anyway
-npm publish -w mangue-ui        # from the REPO ROOT
-```
-
-The root `package.json` is `private`, so a `npm publish` fired there by mistake
-fails instead of publishing the monorepo; `-w mangue-ui` selects the workspace.
-`prepublishOnly` runs the typecheck as a gate. Check what you are about to ship
-with `npm pack --dry-run -w mangue-ui` — only `src/`, `package.json`, `README.md`
-and `LICENSE` should be in the list.
-
-**Bump `packages/mangue-ui/package.json` first.** While the API is pre-1.0, a
-breaking change bumps the *minor* (0.5.0 removed the sidebar's manual collapse);
-additive work bumps the patch. `packages/mangue-ui/docs/project-inventory.md`
-records what landed in each minor and where it came from.
-
----
-
 ## Credits
 
-Design system, tokens and primitives originate from
-[project](https://github.com/) and are reused here with the business logic
-stripped out.
+Design system, tokens and primitives by [Clément Guerin](https://github.com/clementguerin).

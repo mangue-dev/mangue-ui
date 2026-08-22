@@ -39,7 +39,7 @@ export interface NumoChatProps {
 }
 
 /**
- * A fully presentational AI chat panel (modelled on project's "Numo"). It owns
+ * A fully presentational AI chat panel. It owns
  * no AI logic — wire `onSend` to your model and feed `messages` back in. Enter
  * sends, Shift+Enter inserts a newline.
  */

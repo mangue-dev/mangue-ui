@@ -1,6 +1,6 @@
 /* ============================================================================
    mangue-ui — design tokens
-   Extracted from project's design system (radix-nova style, OKLch color space).
+   radix-nova style, OKLch color space.
 
    ── How to consume ─────────────────────────────────────────────────────────
    In your app's CSS entry, AFTER `@import "tailwindcss";`:

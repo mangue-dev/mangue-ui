@@ -60,7 +60,7 @@ export interface MobileNavProps {
  * The mobile bottom bar (<desktop): a floating pill with the sidebar in a menu
  * sheet (left), the command palette in a search sheet (centre), optional custom
  * actions, and an auto "more" menu that flattens the sidebar + command palette
- * so every destination stays reachable. Mirrors project's mobile nav.
+ * so every destination stays reachable.
  */
 export function MobileNav({
   sections = [],

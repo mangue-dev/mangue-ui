@@ -28,8 +28,8 @@ export interface AppShellProps {
 
 /**
  * The assembled application layout: fixed-height row of [nav | (header +
- * scrollable main)], with an optional mobile bottom nav. Responsive behaviour
- * matches project: the sidebars are desktop-only (>=1200px), the mobile nav
+ * scrollable main)], with an optional mobile bottom nav. Responsive behaviour:
+ * the sidebars are desktop-only (>=1200px), the mobile nav
  * takes over below it.
  *
  * The nav column holds the primary sidebar AND the secondary sidebar's landing
