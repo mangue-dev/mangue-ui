@@ -167,7 +167,9 @@ function CommandItem({
       {...props}
     >
       {children}
-      <CheckIcon className="ml-auto opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden group-data-[checked=true]/command-item:opacity-100" />
+      {/* Keep unchecked indicators out of the flex layout: consumers may provide
+          their own trailing content or selection indicator. */}
+      <CheckIcon className="ml-auto hidden group-data-[checked=true]/command-item:block group-has-data-[slot=command-shortcut]/command-item:hidden" />
     </CommandPrimitive.Item>
   )
 }
