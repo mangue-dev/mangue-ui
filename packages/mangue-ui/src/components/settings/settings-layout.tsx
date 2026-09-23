@@ -486,7 +486,7 @@ function SettingsLayout({
                     <button
                       type="button"
                       onClick={() => openSection(section)}
-                      className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left outline-none transition-colors hover:bg-muted/60 focus-visible:bg-muted/60"
+                      className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left outline-none transition-colors hover:bg-control-hover focus-visible:bg-control-hover"
                     >
                       {Icon && (
                         <Icon className="size-4 shrink-0 text-muted-foreground" />

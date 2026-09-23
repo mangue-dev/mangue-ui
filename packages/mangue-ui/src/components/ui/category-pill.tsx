@@ -17,7 +17,7 @@ export function CategoryPill({ active, onClick, children }: CategoryPillProps) {
         // never shifts the pill by 1px.
         "px-3.5 py-1.5 rounded-full border text-xs font-medium transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
         active
-          ? "border-transparent bg-foreground text-background hover:bg-foreground/90"
+          ? "border-transparent bg-foreground text-background hover:bg-foreground-hover"
           : "border-border bg-control text-foreground hover:bg-control-hover"
       )}
     >

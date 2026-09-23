@@ -195,7 +195,7 @@ export const MobileNavItem = React.forwardRef<
       aria-label={label}
       {...props}
       className={cn(
-        "inline-flex h-12 w-12 items-center justify-center rounded-full text-foreground/80 outline-none transition-colors hover:bg-muted active:bg-muted focus-visible:ring-2 focus-visible:ring-ring",
+        "inline-flex h-12 w-12 items-center justify-center rounded-full text-foreground/80 outline-none transition-colors hover:bg-muted active:bg-muted aria-expanded:bg-muted aria-expanded:text-foreground focus-visible:ring-2 focus-visible:ring-ring",
         className,
       )}
     >
@@ -401,7 +401,7 @@ function MobileNavSheetLink({
   const Icon = item.icon;
   const cls = cn(
     "flex h-12 items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors",
-    active ? "bg-muted text-foreground" : "text-foreground/80 hover:bg-muted/60",
+    active ? "bg-muted text-foreground" : "text-foreground/80 hover:bg-control-hover",
     item.disabled && "pointer-events-none opacity-50",
   );
   const inner = (

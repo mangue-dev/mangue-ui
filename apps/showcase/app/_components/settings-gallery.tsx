@@ -375,7 +375,7 @@ export function SettingsGallery() {
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-2">
                 <p className="text-sm font-medium">A password alone opens this account</p>
-                <Badge variant="secondary" className="border-brand/30 text-brand">
+                <Badge variant="secondary" className="bg-brand/10 text-brand">
                   Recommended
                 </Badge>
               </div>

@@ -51,6 +51,12 @@
     @slot;
   }
 }
+@custom-variant data-indeterminate {
+  &:where([data-state="indeterminate"]),
+  &:where([data-indeterminate]:not([data-indeterminate="false"])) {
+    @slot;
+  }
+}
 @custom-variant data-selected {
   &:where([data-selected="true"]) {
     @slot;
@@ -179,6 +185,14 @@
   /* Semantic color mappings */
   --color-control: var(--control);
   --color-control-hover: var(--control-hover);
+  --color-primary-hover: var(--primary-hover);
+  --color-foreground-hover: var(--foreground-hover);
+  --color-destructive-surface: var(--destructive-surface);
+  --color-destructive-surface-hover: var(--destructive-surface-hover);
+  --color-destructive-border: var(--destructive-border);
+  --color-destructive-border-hover: var(--destructive-border-hover);
+  --color-tabs-hover: var(--tabs-hover);
+  --color-slider-thumb: var(--slider-thumb);
   --color-surface-raised: var(--surface-raised);
   --color-surface-sunken: var(--surface-sunken);
   --color-surface-glass: var(--surface-glass);
@@ -278,10 +292,18 @@
      looks like (`disabled:bg-muted`). A control is delimited by its border
      (--input / --border), never by a tint — so it stays legible on --background
      (0.975) AND on --card (0.995) without ever borrowing the disabled look.
-     --control-hover keeps the old --control value: hover DARKENS from white,
-     which is also what off-tracks (Switch) need to stay visible. */
+     --control-hover is the distinct hover fill; controls keep --control at rest,
+     and Switch adds a visible input border to its off track. */
   --control: oklch(1 0 0);
   --control-hover: oklch(0.950 0.008 268);
+  --primary-hover: var(--primary);
+  --foreground-hover: var(--foreground);
+  --destructive-surface: oklch(0.925 0.040 27);
+  --destructive-surface-hover: oklch(0.895 0.060 27);
+  --destructive-border: oklch(0.820 0.080 27);
+  --destructive-border-hover: oklch(0.750 0.100 27);
+  --tabs-hover: var(--muted);
+  --slider-thumb: oklch(1 0 0);
   --surface-raised: oklch(0.995 0.002 266);
   --surface-sunken: oklch(0.940 0.008 268);
   --surface-glass: oklch(0.965 0.006 268 / 60%);
@@ -351,6 +373,14 @@
      carried by --input and collapse to a few percent of white. */
   --control: oklch(0.215 0.003 250);
   --control-hover: oklch(0.245 0.003 250);
+  --primary-hover: var(--primary);
+  --foreground-hover: var(--foreground);
+  --destructive-surface: oklch(0.250 0.050 22.216);
+  --destructive-surface-hover: oklch(0.310 0.070 22.216);
+  --destructive-border: oklch(0.360 0.080 22.216);
+  --destructive-border-hover: oklch(0.420 0.100 22.216);
+  --tabs-hover: var(--muted);
+  --slider-thumb: oklch(0.985 0 0);
   --surface-raised: oklch(0.170 0.003 250);
   --surface-sunken: oklch(0.090 0.003 250);
   --surface-glass: oklch(0.170 0.003 250 / 60%);
@@ -373,6 +403,28 @@
   --canvas: oklch(0.060 0.003 250);
   --canvas-glow-1: oklch(0.28 0.10 265 / 0.30);
   --canvas-glow-2: oklch(0.20 0.06 265 / 0.25);
+}
+
+@supports (color: color-mix(in oklab, red, blue)) {
+  :root {
+    --primary-hover: color-mix(in oklab, var(--primary) 90%, var(--background));
+    --foreground-hover: color-mix(in oklab, var(--foreground) 90%, var(--background));
+    --destructive-surface: color-mix(in oklab, var(--destructive) 10%, var(--background));
+    --destructive-surface-hover: color-mix(in oklab, var(--destructive) 20%, var(--background));
+    --destructive-border: color-mix(in oklab, var(--destructive) 30%, var(--background));
+    --destructive-border-hover: color-mix(in oklab, var(--destructive) 40%, var(--background));
+    --tabs-hover: color-mix(in oklab, var(--foreground) 5%, var(--muted));
+  }
+
+  .dark {
+    --primary-hover: color-mix(in oklab, var(--primary) 90%, var(--background));
+    --foreground-hover: color-mix(in oklab, var(--foreground) 90%, var(--background));
+    --destructive-surface: color-mix(in oklab, var(--destructive) 20%, var(--background));
+    --destructive-surface-hover: color-mix(in oklab, var(--destructive) 30%, var(--background));
+    --destructive-border: color-mix(in oklab, var(--destructive) 40%, var(--background));
+    --destructive-border-hover: color-mix(in oklab, var(--destructive) 50%, var(--background));
+    --tabs-hover: color-mix(in oklab, var(--foreground) 5%, var(--muted));
+  }
 }
 
 html,

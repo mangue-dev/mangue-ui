@@ -9,14 +9,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default:
+          "bg-primary text-primary-foreground hover:bg-primary-hover aria-expanded:bg-primary-hover",
         outline:
           "border-border bg-control hover:bg-control-hover hover:text-foreground aria-expanded:bg-control-hover aria-expanded:text-foreground dark:border-input",
         ghost:
-          "bg-transparent text-foreground hover:bg-muted aria-expanded:bg-muted dark:hover:bg-muted/50",
+          "bg-transparent text-foreground hover:bg-muted aria-expanded:bg-muted",
         destructive:
-          "border-destructive/30 bg-destructive/10 text-destructive hover:border-destructive/40 hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:border-destructive/40 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
-        link: "text-primary underline-offset-4 hover:underline",
+          "border-destructive-border bg-destructive-surface text-destructive hover:border-destructive-border-hover hover:bg-destructive-surface-hover focus-visible:border-destructive-border-hover focus-visible:ring-destructive/20 aria-expanded:border-destructive-border-hover aria-expanded:bg-destructive-surface-hover dark:focus-visible:ring-destructive/40",
+        link:
+          "text-primary underline-offset-4 hover:text-primary-hover hover:underline aria-expanded:text-primary-hover aria-expanded:underline",
       },
       size: {
         default:

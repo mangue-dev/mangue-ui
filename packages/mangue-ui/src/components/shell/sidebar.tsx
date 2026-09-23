@@ -519,7 +519,7 @@ function SidebarRow({
     collapsed ? cn(ROW_BOX, "gap-0 pr-[9px]") : "pr-3",
     active
       ? "bg-sidebar-accent text-sidebar-accent-foreground"
-      : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
+      : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground",
     item.disabled && "pointer-events-none opacity-50",
   );
 

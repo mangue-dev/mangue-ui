@@ -40,7 +40,7 @@ export function SendButtonWithCost({
             "inline-flex h-8 items-center justify-center rounded-full text-[11px] font-medium tabular-nums transition-colors",
             "bg-primary text-primary-foreground shadow-sm",
             "disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:shadow-none",
-            "enabled:hover:bg-primary/90",
+            "enabled:hover:bg-primary-hover",
             showCost ? "gap-1.5 px-2.5" : "w-8",
           )}
         >

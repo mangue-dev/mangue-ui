@@ -391,6 +391,29 @@ export function PrimitivesGallery() {
               >
                 <Check /> Save
               </SplitButton>
+              <SplitButton
+                variant="ghost"
+                size="lg"
+                onClick={() => {}}
+                menu={
+                  <DropdownMenuItem>
+                    <Settings /> Preferences
+                  </DropdownMenuItem>
+                }
+              >
+                <Settings /> Configure
+              </SplitButton>
+              <SplitButton
+                variant="destructive"
+                onClick={() => {}}
+                menu={
+                  <DropdownMenuItem>
+                    <Trash2 /> Delete
+                  </DropdownMenuItem>
+                }
+              >
+                <Trash2 /> Remove
+              </SplitButton>
             </Row>
           </div>
         </Panel>
@@ -567,6 +590,48 @@ export function PrimitivesGallery() {
                 />
               </div>
 
+              <Row label="Checkbox states">
+                <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Checkbox
+                    checked={false}
+                    onCheckedChange={() => {}}
+                    aria-label="Unchecked checkbox"
+                  />
+                  Unchecked
+                </label>
+                <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Checkbox
+                    checked="indeterminate"
+                    onCheckedChange={() => {}}
+                    aria-label="Indeterminate checkbox"
+                  />
+                  Indeterminate
+                </label>
+                <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Checkbox
+                    checked
+                    disabled
+                    aria-label="Disabled checked checkbox"
+                  />
+                  Disabled
+                </label>
+              </Row>
+
+              <Row label="Switch states">
+                <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Switch
+                    checked={false}
+                    onCheckedChange={() => {}}
+                    aria-label="Unchecked switch"
+                  />
+                  Off
+                </label>
+                <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Switch checked disabled aria-label="Disabled switch" />
+                  Disabled
+                </label>
+              </Row>
+
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
                   <span>Volume</span>
@@ -581,6 +646,14 @@ export function PrimitivesGallery() {
                   max={100}
                   step={1}
                 />
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
+                  <span>Disabled slider</span>
+                  <span className="tabular-nums">40%</span>
+                </div>
+                <Slider defaultValue={[40]} min={0} max={100} disabled />
               </div>
 
               <SegmentedControl
@@ -604,22 +677,70 @@ export function PrimitivesGallery() {
       >
         <div className="grid gap-4 md:grid-cols-2">
           <Panel>
-            <Tabs defaultValue="overview">
-              <TabsList>
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="activity">Activity</TabsTrigger>
-                <TabsTrigger value="settings">Settings</TabsTrigger>
-              </TabsList>
-              <TabsContent value="overview" className="text-muted-foreground">
-                A snapshot of the project — status, owners and recent changes.
-              </TabsContent>
-              <TabsContent value="activity" className="text-muted-foreground">
-                Every commit, comment and deploy in chronological order.
-              </TabsContent>
-              <TabsContent value="settings" className="text-muted-foreground">
-                Rename, transfer or archive this project.
-              </TabsContent>
-            </Tabs>
+            <div className="space-y-5">
+              <Tabs defaultValue="overview">
+                <TabsList>
+                  <TabsTrigger value="overview">Overview</TabsTrigger>
+                  <TabsTrigger value="activity">Activity</TabsTrigger>
+                  <TabsTrigger value="settings">Settings</TabsTrigger>
+                </TabsList>
+                <TabsContent value="overview" className="text-muted-foreground">
+                  A snapshot of the project — status, owners and recent changes.
+                </TabsContent>
+                <TabsContent value="activity" className="text-muted-foreground">
+                  Every commit, comment and deploy in chronological order.
+                </TabsContent>
+                <TabsContent value="settings" className="text-muted-foreground">
+                  Rename, transfer or archive this project.
+                </TabsContent>
+              </Tabs>
+
+              <Separator />
+
+              <div className="space-y-2">
+                <span className="text-xs font-medium text-muted-foreground">
+                  Line tabs
+                </span>
+                <Tabs defaultValue="line-overview">
+                  <TabsList variant="line">
+                    <TabsTrigger value="line-overview">Overview</TabsTrigger>
+                    <TabsTrigger value="line-activity">Activity</TabsTrigger>
+                    <TabsTrigger value="line-settings">Settings</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="line-overview" className="text-muted-foreground">
+                    Inactive line tabs keep their hover on the trigger only.
+                  </TabsContent>
+                  <TabsContent value="line-activity" className="text-muted-foreground">
+                    The active indicator follows the selected trigger.
+                  </TabsContent>
+                  <TabsContent value="line-settings" className="text-muted-foreground">
+                    The same state treatment works for every line tab.
+                  </TabsContent>
+                </Tabs>
+              </div>
+
+              <div className="space-y-2">
+                <span className="text-xs font-medium text-muted-foreground">
+                  Vertical tabs
+                </span>
+                <Tabs orientation="vertical" defaultValue="vertical-overview">
+                  <TabsList variant="line">
+                    <TabsTrigger value="vertical-overview">Overview</TabsTrigger>
+                    <TabsTrigger value="vertical-activity">Activity</TabsTrigger>
+                    <TabsTrigger value="vertical-settings">Settings</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="vertical-overview" className="text-muted-foreground">
+                    Vertical and horizontal layouts share the same hover tokens.
+                  </TabsContent>
+                  <TabsContent value="vertical-activity" className="text-muted-foreground">
+                    The trigger remains the only hoverable zone.
+                  </TabsContent>
+                  <TabsContent value="vertical-settings" className="text-muted-foreground">
+                    Compound layouts do not paint their wrapper on hover.
+                  </TabsContent>
+                </Tabs>
+              </div>
+            </div>
           </Panel>
 
           <Panel>

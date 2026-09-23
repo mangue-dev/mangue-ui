@@ -95,7 +95,7 @@ export function SearchCommand({
               setOpen(true);
             }}
             className={cn(
-              "flex h-8 cursor-text items-center gap-1.5 rounded-full border border-border bg-control px-3 text-[0.8rem] font-medium shadow-xs transition-[border-color,box-shadow] focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/30 dark:border-input",
+              "flex h-8 cursor-text items-center gap-1.5 rounded-full border border-border bg-control px-3 text-[0.8rem] font-medium shadow-xs transition-colors hover:bg-control-hover focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/30 dark:border-input",
               className,
             )}
           >
