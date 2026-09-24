@@ -392,18 +392,6 @@ export function PrimitivesGallery() {
                 <Check /> Save
               </SplitButton>
               <SplitButton
-                variant="ghost"
-                size="lg"
-                onClick={() => {}}
-                menu={
-                  <DropdownMenuItem>
-                    <Settings /> Preferences
-                  </DropdownMenuItem>
-                }
-              >
-                <Settings /> Configure
-              </SplitButton>
-              <SplitButton
                 variant="destructive"
                 onClick={() => {}}
                 menu={
@@ -632,29 +620,24 @@ export function PrimitivesGallery() {
                 </label>
               </Row>
 
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-sm">
-                  <span>Volume</span>
-                  <span className="tabular-nums text-muted-foreground">
-                    {volume[0]}%
-                  </span>
-                </div>
-                <Slider
-                  value={volume}
-                  onValueChange={setVolume}
-                  min={0}
-                  max={100}
-                  step={1}
-                />
-              </div>
+              <Slider
+                label="Volume"
+                valueLabel={`${volume[0]}%`}
+                value={volume}
+                onValueChange={setVolume}
+                min={0}
+                max={100}
+                step={1}
+              />
 
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-sm text-muted-foreground">
-                  <span>Disabled slider</span>
-                  <span className="tabular-nums">40%</span>
-                </div>
-                <Slider defaultValue={[40]} min={0} max={100} disabled />
-              </div>
+              <Slider
+                label="Disabled"
+                valueLabel="40%"
+                defaultValue={[40]}
+                min={0}
+                max={100}
+                disabled
+              />
 
               <SegmentedControl
                 label="Layout"

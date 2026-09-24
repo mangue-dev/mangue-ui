@@ -83,7 +83,7 @@ export function AgentFab({
                   className={cn(
                     "relative inline-flex items-center justify-center rounded-full",
                     "h-10 w-10 md:h-11 md:w-11",
-                    "bg-card/95 supports-backdrop-filter:backdrop-blur-md",
+                     "bg-control hover:bg-control-hover",
                     "ring-1 ring-foreground/10 hover:ring-foreground/20",
                     "text-foreground",
                     "shadow-[0_8px_24px_-12px_rgba(0,0,0,0.25),0_2px_6px_-2px_rgba(0,0,0,0.1)]",

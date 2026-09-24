@@ -147,7 +147,7 @@ export function NumoChat({
               key={suggestion.key}
               type="button"
               onClick={suggestion.onSelect}
-              className="rounded-full border border-border bg-card px-3 py-1.5 text-xs text-foreground outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50"
+              className="inline-flex items-center justify-center rounded-full bg-control px-3 py-1.5 text-xs leading-none text-foreground outline-none transition-colors hover:bg-control-hover focus-visible:ring-3 focus-visible:ring-ring/50"
             >
               {suggestion.label}
             </button>
@@ -157,7 +157,7 @@ export function NumoChat({
 
       {/* Composer */}
       <div className="border-t border-border p-2.5">
-        <div className="chat-input-surface flex items-end gap-2 rounded-xl border border-border bg-card p-1.5 pl-3 focus-within:outline-none">
+        <div className="chat-input-surface flex items-end gap-2 rounded-xl bg-control p-1.5 pl-3 focus-within:outline-none">
           <textarea
             value={value}
             onChange={(event) => setValue(event.target.value)}

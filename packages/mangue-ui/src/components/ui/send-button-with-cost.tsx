@@ -37,11 +37,11 @@ export function SendButtonWithCost({
           disabled={disabled}
           aria-label={ariaLabel}
           className={cn(
-            "inline-flex h-8 items-center justify-center rounded-full text-[11px] font-medium tabular-nums transition-colors",
+            "inline-flex h-8 items-center justify-center rounded-full text-[11px] font-medium leading-none tabular-nums transition-colors",
             "bg-primary text-primary-foreground shadow-sm",
             "disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:shadow-none",
             "enabled:hover:bg-primary-hover",
-            showCost ? "gap-1.5 px-2.5" : "w-8",
+            showCost ? "gap-1 px-2.5" : "w-8",
           )}
         >
           {showCost ? (

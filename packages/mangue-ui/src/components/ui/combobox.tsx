@@ -92,7 +92,7 @@ export interface ComboboxProps {
 
 /** The trigger's look, shared by the live button and the locked chip. */
 const COMPACT_CHIP =
-  "flex h-8 shrink items-center gap-1.5 rounded-full border border-border/60 px-2.5 font-sans text-xs font-medium focus-visible:border-transparent focus-visible:outline-none focus-visible:ring-0";
+  "flex h-8 shrink items-center gap-1.5 rounded-full px-2.5 font-sans text-xs font-medium focus-visible:outline-none focus-visible:ring-0";
 
 export function Combobox({
   value,
@@ -167,7 +167,7 @@ export function Combobox({
             <span
               className={cn(
                 COMPACT_CHIP,
-                "pointer-events-none bg-muted/40 text-foreground/45",
+                "pointer-events-none bg-control text-foreground/45",
                 variant === "field" && "h-11 w-full rounded-lg justify-start px-3.5 font-sans font-normal text-base md:h-9 md:text-sm",
               )}
             >
@@ -254,7 +254,7 @@ export function Combobox({
             aria-label={ariaLabel}
             disabled={disabled}
             className={cn(
-              "h-11 w-full justify-between rounded-lg border border-input bg-control px-3.5 py-1.5 font-sans font-normal text-base focus-visible:border-transparent focus-visible:outline-none focus-visible:ring-0 md:h-9 md:text-sm",
+              "h-11 w-full justify-between rounded-lg bg-control px-3.5 py-1.5 font-sans font-normal text-base focus-visible:outline-none focus-visible:ring-0 md:h-9 md:text-sm",
               className,
             )}
           >

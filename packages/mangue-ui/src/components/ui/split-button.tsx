@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "./dropdown-menu"
 
-type SplitButtonVariant = "default" | "outline" | "ghost" | "destructive"
+type SplitButtonVariant = "default" | "outline" | "destructive"
 type SplitButtonSize = "sm" | "default" | "lg"
 
 /** The chevron trigger is a square icon-button matching the action's height. */
@@ -19,16 +19,6 @@ const TRIGGER_SIZE: Record<SplitButtonSize, "icon-sm" | "icon" | "icon-lg"> = {
   sm: "icon-sm",
   default: "icon",
   lg: "icon-lg",
-}
-
-/** Divider tinted per variant. Only the RIGHT border is colored (the button's
- *  base already draws a 1px transparent border on all sides) so a solid-fill
- *  action doesn't get outlined on every edge — just the seam with the chevron. */
-const DIVIDER: Record<SplitButtonVariant, string> = {
-  default: "border-r-primary-foreground/20",
-  destructive: "border-r-destructive-border",
-  outline: "border-r-border",
-  ghost: "border-r-border",
 }
 
 export interface SplitButtonProps
@@ -58,9 +48,9 @@ export interface SplitButtonProps
 }
 
 /**
- * A split button: a primary action fused with a dropdown. Clicking the left
+ * A split button: a primary action paired with a dropdown. Clicking the left
  * side runs the action; the right chevron opens `menu`. Both halves share the
- * same `variant`/`size` and read as a single pill.
+ * same `variant`/`size` and are separated by a small gap.
  *
  *   <SplitButton onClick={run} menu={<><DropdownMenuItem>…</DropdownMenuItem></>}>
  *     <Play /> Run
@@ -82,13 +72,22 @@ export function SplitButton({
   children,
   ...actionProps
 }: SplitButtonProps) {
+  const resolvedVariant: SplitButtonVariant =
+    variant === "outline" || variant === "destructive" ? variant : "default"
+
   return (
-    <div data-slot="split-button" className={cn("inline-flex", className)}>
+    <div
+      data-slot="split-button"
+      className={cn("inline-flex gap-px rounded-full", className)}
+    >
       <Button
-        variant={variant}
+        variant={resolvedVariant}
         size={size}
         disabled={disabled}
-        className={cn("rounded-r-none", DIVIDER[variant], actionClassName)}
+        className={cn(
+          actionClassName,
+          "rounded-none rounded-l-full rounded-r-none"
+        )}
         {...actionProps}
       >
         {children}
@@ -96,13 +95,13 @@ export function SplitButton({
       <DropdownMenu open={menuOpen} onOpenChange={onMenuOpenChange}>
         <DropdownMenuTrigger asChild>
           <Button
-            variant={variant}
+            variant={resolvedVariant}
             size={TRIGGER_SIZE[size]}
             disabled={disabled}
             aria-label={menuLabel}
             className={cn(
-              "rounded-l-none border-l-0",
-              triggerClassName
+              triggerClassName,
+              "rounded-none rounded-l-none rounded-r-full"
             )}
           >
             <ChevronDown />

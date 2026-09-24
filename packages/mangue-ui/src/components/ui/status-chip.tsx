@@ -30,7 +30,7 @@ export function StatusChip({
       data-slot="status-chip"
       data-tone={tone}
       className={cn(
-        "inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full px-3 text-xs font-medium whitespace-nowrap leading-none [&_svg]:size-3.5 [&_svg]:shrink-0",
+        "inline-flex h-7 shrink-0 items-center gap-1 rounded-full px-3 text-xs font-medium whitespace-nowrap leading-none [&_svg]:size-3.5 [&_svg]:shrink-0",
         TONE_CLASSES[tone],
         className
       )}

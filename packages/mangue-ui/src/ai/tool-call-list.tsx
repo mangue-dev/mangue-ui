@@ -199,7 +199,7 @@ export function ToolCallList({
             variant="ghost"
             size="sm"
             onClick={() => setExpanded(false)}
-            className="group h-auto w-full justify-start gap-2 bg-transparent px-0 py-0.5 text-left text-xs font-normal text-muted-foreground hover:bg-transparent hover:text-foreground"
+             className="group h-auto w-full justify-start gap-1.5 bg-transparent px-0 py-0.5 text-left text-xs font-normal text-muted-foreground hover:bg-transparent hover:text-foreground"
           >
             <ChevronRight className="h-3 w-3 shrink-0 rotate-90 transition-transform" />
             <span className={cn("flex-1 truncate", anyRunning && "text-shimmer")}>
@@ -235,7 +235,7 @@ export function ToolCallList({
         size="sm"
         onClick={() => setExpanded(true)}
         className={cn(
-          "group h-auto w-full justify-start gap-2 bg-transparent px-0 py-0.5 text-left text-xs font-normal hover:bg-transparent",
+           "group h-auto w-full justify-start gap-1.5 bg-transparent px-0 py-0.5 text-left text-xs font-normal hover:bg-transparent",
           lastError
             ? "text-destructive"
             : "text-muted-foreground hover:text-foreground",

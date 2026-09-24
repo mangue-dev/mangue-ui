@@ -189,6 +189,8 @@
   --color-foreground-hover: var(--foreground-hover);
   --color-destructive-surface: var(--destructive-surface);
   --color-destructive-surface-hover: var(--destructive-surface-hover);
+  --color-destructive-button: var(--destructive-button);
+  --color-destructive-button-foreground: var(--destructive-button-foreground);
   --color-destructive-border: var(--destructive-border);
   --color-destructive-border-hover: var(--destructive-border-hover);
   --color-tabs-hover: var(--tabs-hover);
@@ -285,24 +287,20 @@
   --sidebar-ring: oklch(0.676 0.060 270);
 
   /* Semantic tokens */
-  /* Control fill — the surface of form controls (input, select, checkbox…) and
-     of neutral chips (secondary badge, status chip, button-group text).
-     PURE WHITE on purpose: in light mode a gray fill sitting on a white card is
-     read as "disabled", because gray-on-white is exactly what our disabled state
-     looks like (`disabled:bg-muted`). A control is delimited by its border
-     (--input / --border), never by a tint — so it stays legible on --background
-     (0.975) AND on --card (0.995) without ever borrowing the disabled look.
-     --control-hover is the distinct hover fill; controls keep --control at rest,
-     and Switch adds a visible input border to its off track. */
-  --control: oklch(1 0 0);
-  --control-hover: oklch(0.950 0.008 268);
+  /* Shared control fill — inputs, selects, outline buttons and neutral chips use
+     the same opaque gray. It stays visible on both background and card without
+     relying on a border. */
+  --control: oklch(0.935 0.008 268);
+  --control-hover: oklch(0.900 0.010 268);
   --primary-hover: var(--primary);
   --foreground-hover: var(--foreground);
+  --destructive-button: var(--destructive);
+  --destructive-button-foreground: oklch(0.985 0 0);
   --destructive-surface: oklch(0.925 0.040 27);
   --destructive-surface-hover: oklch(0.895 0.060 27);
   --destructive-border: oklch(0.820 0.080 27);
   --destructive-border-hover: oklch(0.750 0.100 27);
-  --tabs-hover: var(--muted);
+  --tabs-hover: var(--control-hover);
   --slider-thumb: oklch(1 0 0);
   --surface-raised: oklch(0.995 0.002 266);
   --surface-sunken: oklch(0.940 0.008 268);
@@ -369,17 +367,18 @@
   --sidebar-ring: oklch(0.555 0 0);
 
   /* Semantic tokens dark */
-  /* Opaque on purpose: an alpha fill here would multiply with the alpha already
-     carried by --input and collapse to a few percent of white. */
-  --control: oklch(0.215 0.003 250);
-  --control-hover: oklch(0.245 0.003 250);
+  /* Opaque on purpose: controls must stay visible without relying on a border. */
+  --control: oklch(0.245 0.006 250);
+  --control-hover: oklch(0.285 0.006 250);
   --primary-hover: var(--primary);
   --foreground-hover: var(--foreground);
+  --destructive-button: oklch(0.50 0.20 22.216);
+  --destructive-button-foreground: oklch(0.985 0 0);
   --destructive-surface: oklch(0.250 0.050 22.216);
   --destructive-surface-hover: oklch(0.310 0.070 22.216);
   --destructive-border: oklch(0.360 0.080 22.216);
   --destructive-border-hover: oklch(0.420 0.100 22.216);
-  --tabs-hover: var(--muted);
+  --tabs-hover: var(--control-hover);
   --slider-thumb: oklch(0.985 0 0);
   --surface-raised: oklch(0.170 0.003 250);
   --surface-sunken: oklch(0.090 0.003 250);

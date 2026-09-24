@@ -48,7 +48,7 @@ export function TypeBadge({
       data-slot="type-badge"
       data-kind={kind}
       className={cn(
-        "inline-flex h-7 items-center gap-1.5 shrink-0 px-3 rounded-full text-xs font-semibold leading-none",
+        "inline-flex h-7 shrink-0 items-center gap-1 rounded-full px-3 text-xs font-semibold leading-none",
         classes,
         className
       )}

@@ -62,7 +62,7 @@ export function ImportJsonButton({
         type="button"
         variant={variant}
         size={size}
-        className={cn("gap-1.5", className)}
+        className={cn("gap-1", className)}
         onClick={() => inputRef.current?.click()}
         disabled={disabled || isLoading}
         {...props}

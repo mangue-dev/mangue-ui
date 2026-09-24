@@ -99,7 +99,7 @@ export function AgentInput({
           disabled={disabled}
           maxHeight={maxHeight}
           className={cn(
-            "flex flex-col gap-0 overflow-hidden rounded-2xl border border-border bg-card p-0 shadow-sm transition-all",
+            "flex flex-col gap-0 overflow-hidden rounded-2xl bg-control p-0 shadow-sm transition-all",
             "focus-within:outline-none",
             className,
           )}

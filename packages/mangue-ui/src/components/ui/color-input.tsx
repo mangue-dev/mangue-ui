@@ -30,7 +30,7 @@ export interface ColorInputProps {
 
 /**
  * Color picker built on top of react-colorful. The swatch and hex text input
- * share a single bordered container so they read as one control. Clicking the
+ * share a single container so they read as one control. Clicking the
  * swatch opens a popover with the picker; typing in the field works in parallel.
  * Always uses `#`-prefixed hex strings (CSS canonical form).
  *
@@ -97,7 +97,7 @@ export function ColorInput({
   return (
     <div
       className={cn(
-        "group/color-input relative flex w-full items-center rounded-lg border border-input bg-control shadow-xs transition-[color,box-shadow] outline-none",
+        "group/color-input relative flex w-full items-center rounded-lg bg-control shadow-xs transition-[color,box-shadow] outline-none",
         "has-disabled:cursor-not-allowed has-disabled:opacity-50 has-disabled:bg-muted",
         heightClass,
         paddingClass,

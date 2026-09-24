@@ -73,7 +73,7 @@ function CommandInput({
     <div data-slot="command-input-wrapper" className="p-1 pb-0">
       {/* rounded-sm (12px), same as the rows: the field and the rows sit at the
           same 8px inset from a 20px surface, so they carry the same radius. */}
-      <InputGroup className="h-8! rounded-sm! border-input/30 shadow-none! *:data-[slot=input-group-addon]:pl-2!">
+      <InputGroup className="h-8! rounded-sm! shadow-none! *:data-[slot=input-group-addon]:pl-2!">
         <CommandPrimitive.Input
           data-slot="command-input"
           className={cn(

@@ -91,8 +91,8 @@ export function HorizontalScroller({
   };
 
   const arrowClass = cn(
-    "absolute top-1/2 z-20 -translate-y-1/2 rounded-full bg-card/95 shadow-md backdrop-blur-sm",
-    arrowSize === "sm" && "size-5 min-w-0 border border-border p-0 shadow-sm",
+    "absolute top-1/2 z-20 -translate-y-1/2 rounded-full bg-control shadow-md backdrop-blur-sm",
+    arrowSize === "sm" && "size-5 min-w-0 p-0 shadow-sm",
     // Revealed on hover — and on focus too, otherwise a keyboard user would
     // tab onto an invisible button.
     revealOnHover &&

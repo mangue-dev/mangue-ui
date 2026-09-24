@@ -39,7 +39,7 @@ export function BackLinkButton({
         asChild
         variant="ghost"
         size="sm"
-        className={cn("gap-1.5 -ml-1", className)}
+        className={cn("gap-1 -ml-1", className)}
         {...props}
       >
         <Link href={href}>{content}</Link>
@@ -52,7 +52,7 @@ export function BackLinkButton({
       variant="ghost"
       size="sm"
       onClick={onClick}
-      className={cn("gap-1.5 -ml-1", className)}
+      className={cn("gap-1 -ml-1", className)}
       {...props}
     >
       {content}

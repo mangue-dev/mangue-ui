@@ -195,7 +195,7 @@ export const MobileNavItem = React.forwardRef<
       aria-label={label}
       {...props}
       className={cn(
-        "inline-flex h-12 w-12 items-center justify-center rounded-full text-foreground/80 outline-none transition-colors hover:bg-muted active:bg-muted aria-expanded:bg-muted aria-expanded:text-foreground focus-visible:ring-2 focus-visible:ring-ring",
+        "inline-flex h-12 w-12 items-center justify-center rounded-full text-foreground/80 outline-none transition-colors hover:bg-control-hover active:bg-control-hover aria-expanded:bg-control-hover aria-expanded:text-foreground focus-visible:ring-2 focus-visible:ring-ring",
         className,
       )}
     >
@@ -469,7 +469,7 @@ function MobileSearchSheet({
     >
       <CommandPrimitive filter={commandFilter} shouldFilter loop className="flex h-full flex-col">
         <div className="flex h-[60px] shrink-0 items-center gap-2 px-3">
-          <div className="flex h-11 flex-1 items-center gap-2 rounded-full border border-border bg-card px-4">
+          <div className="flex h-11 flex-1 items-center gap-2 rounded-full bg-control px-4">
             <Search className="size-4 shrink-0 text-muted-foreground" />
             <CommandPrimitive.Input
               autoFocus

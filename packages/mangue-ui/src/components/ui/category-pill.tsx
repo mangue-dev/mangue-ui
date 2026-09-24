@@ -13,12 +13,10 @@ export function CategoryPill({ active, onClick, children }: CategoryPillProps) {
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        // The border sits on BOTH states (transparent when active) so toggling
-        // never shifts the pill by 1px.
-        "px-3.5 py-1.5 rounded-full border text-xs font-medium transition-colors outline-none focus-visible:outline-none focus-visible:ring-0",
+        "inline-flex items-center justify-center rounded-full px-3.5 py-1.5 text-xs font-medium leading-none transition-colors outline-none focus-visible:outline-none focus-visible:ring-0",
         active
-          ? "border-transparent bg-foreground text-background hover:bg-foreground-hover"
-          : "border-border bg-control text-foreground hover:bg-control-hover"
+          ? "bg-foreground text-background hover:bg-foreground-hover"
+          : "bg-control text-foreground hover:bg-control-hover"
       )}
     >
       {children}

@@ -364,7 +364,6 @@ function SettingsLayout({
               "w-full justify-start gap-2",
               railed ? "rounded-lg px-3 py-2.5" : "px-2.5 py-2",
               "data-active:bg-transparent dark:data-active:bg-transparent",
-              "dark:data-active:border-transparent",
               "group-data-[variant=default]/tabs-list:data-active:shadow-none"
             )}
           >
@@ -375,8 +374,8 @@ function SettingsLayout({
                 className={cn(
                   "absolute inset-0",
                   railed
-                    ? "rounded-lg bg-muted"
-                    : "rounded-md bg-background shadow-sm dark:border dark:border-input dark:bg-control"
+                    ? "rounded-lg bg-background"
+                    : "rounded-md bg-background shadow-sm"
                 )}
                 transition={
                   reduceMotion ? { duration: 0 } : transitions.snappy
@@ -486,7 +485,7 @@ function SettingsLayout({
                     <button
                       type="button"
                       onClick={() => openSection(section)}
-                      className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left outline-none transition-colors hover:bg-control-hover focus-visible:bg-control-hover"
+                      className="flex w-full items-center gap-1.5 rounded-lg px-3 py-2.5 text-left leading-none outline-none transition-colors hover:bg-control-hover focus-visible:bg-control-hover"
                     >
                       {Icon && (
                         <Icon className="size-4 shrink-0 text-muted-foreground" />
