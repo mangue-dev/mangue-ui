@@ -23,7 +23,7 @@ export interface ColorInputProps {
   className?: string;
   /** Accessible label, applied to the swatch trigger and the hex text input. */
   label?: string;
-  /** Visual size — "md" matches the default Input height (h-9), "sm" matches h-7. */
+  /** Visual size — "md" matches the default Input height, "sm" matches h-7. */
   size?: "sm" | "md";
   disabled?: boolean;
 }
@@ -88,17 +88,16 @@ export function ColorInput({
     onChange(next);
   };
 
-  const heightClass = size === "sm" ? "h-7" : "h-11";
+  const heightClass = size === "sm" ? "h-7" : "h-11 md:h-9";
   const paddingClass = size === "sm" ? "p-0.5 pr-2" : "p-1.5 pr-3.5";
   const swatchRadiusClass = size === "sm" ? "rounded-[5px]" : "rounded-[7px]";
-  const textSizeClass = size === "sm" ? "text-xs" : "text-sm";
-  const textGapClass = size === "sm" ? "pl-1.5" : "pl-2.5";
+  const textSizeClass = size === "sm" ? "text-xs" : "text-base md:text-sm";
+  const textGapClass = size === "sm" ? "pl-1.5" : "pl-3.5";
 
   return (
     <div
       className={cn(
         "group/color-input relative flex w-full items-center rounded-lg border border-input bg-control shadow-xs transition-[color,box-shadow] outline-none",
-        "focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50",
         "has-disabled:cursor-not-allowed has-disabled:opacity-50 has-disabled:bg-muted",
         heightClass,
         paddingClass,
@@ -115,8 +114,7 @@ export function ColorInput({
             }
             className={cn(
               "relative aspect-square h-full shrink-0 cursor-pointer overflow-hidden outline-none ring-1 ring-inset ring-border/60 transition-shadow",
-              "hover:ring-foreground/20",
-              "focus-visible:ring-2 focus-visible:ring-ring",
+               "hover:ring-foreground/20 focus-visible:outline-none focus-visible:ring-0",
               "disabled:cursor-not-allowed",
               swatchRadiusClass,
             )}
@@ -149,7 +147,7 @@ export function ColorInput({
             onChange={(event) => handleInputChange(event.target.value)}
             onBlur={handleInputBlur}
             placeholder={placeholder}
-            className="h-8 font-mono text-xs"
+            className="h-9 font-sans text-sm"
             maxLength={7}
             aria-label={label}
           />
@@ -163,7 +161,7 @@ export function ColorInput({
         placeholder={placeholder}
         disabled={disabled}
         className={cn(
-          "min-w-0 flex-1 bg-transparent font-mono tracking-wide outline-none",
+          "min-w-0 flex-1 bg-transparent font-sans tracking-wide outline-none",
           "placeholder:text-muted-foreground placeholder:tracking-normal",
           "disabled:cursor-not-allowed",
           textSizeClass,

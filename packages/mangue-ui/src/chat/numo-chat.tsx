@@ -157,14 +157,14 @@ export function NumoChat({
 
       {/* Composer */}
       <div className="border-t border-border p-2.5">
-        <div className="chat-input-surface flex items-end gap-2 rounded-xl border border-border bg-card p-1.5 pl-3 focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50">
+        <div className="chat-input-surface flex items-end gap-2 rounded-xl border border-border bg-card p-1.5 pl-3 focus-within:outline-none">
           <textarea
             value={value}
             onChange={(event) => setValue(event.target.value)}
             onKeyDown={onKeyDown}
             placeholder={placeholder}
             rows={1}
-            className="max-h-32 flex-1 resize-none bg-transparent py-2 text-sm outline-none placeholder:text-muted-foreground select-text"
+            className="max-h-32 flex-1 resize-none bg-transparent py-2 font-sans text-base outline-none placeholder:text-muted-foreground select-text md:text-sm"
           />
           <Button
             type="button"

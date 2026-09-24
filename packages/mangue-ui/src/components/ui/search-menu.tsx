@@ -30,7 +30,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 
 /** Shared styling for the search input inside any dropdown (cmdk or Radix). */
 export const searchInputClass =
-  "w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground";
+  "w-full bg-transparent font-sans text-sm outline-none placeholder:text-muted-foreground";
 
 /**
  * The search row (magnifier + input) shared by every searchable dropdown — the
@@ -43,7 +43,7 @@ export function DropdownSearchRow({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center gap-2 px-2 py-1">
+    <div className="mx-1 flex min-h-8 items-center gap-2 rounded-sm px-2 py-1.5">
       <SearchIcon className="size-4 shrink-0 opacity-50" />
       {children}
     </div>
@@ -122,7 +122,7 @@ export function SearchMenu({
       // rounded-xl for the same reason as Combobox: <Command> paints this
       // surface at 20px, rows sit 8px in (Command's p-1 + CommandGroup's p-1)
       // and carry 12px — 20 − 8 = 12, concentric.
-      className={cn("w-60 overflow-hidden rounded-xl p-0", contentClassName)}
+      className={cn("w-60 min-w-48 overflow-hidden rounded-xl p-0", contentClassName)}
       onClick={stop}
       onPointerDown={stop}
     >

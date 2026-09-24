@@ -214,7 +214,7 @@ export function HeaderSearch({
       type="button"
       onClick={onClick}
       className={cn(
-        "group inline-flex h-9 w-full max-w-sm items-center gap-2 rounded-lg border border-border bg-card px-3 text-sm text-muted-foreground outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50",
+        "group inline-flex h-11 w-full max-w-sm items-center gap-2 rounded-lg border border-border bg-card px-3.5 py-1.5 font-sans font-normal text-base text-muted-foreground outline-none transition-colors hover:bg-muted focus-visible:outline-none md:h-9 md:text-sm",
         className,
       )}
     >

@@ -164,7 +164,7 @@ function TabsTrigger({
     <TabsPrimitive.Trigger
       data-slot="tabs-trigger"
       className={cn(
-        "relative inline-flex flex-1 shrink-0 items-center justify-center gap-2 rounded-full border border-transparent bg-clip-padding px-4 text-sm font-medium whitespace-nowrap text-foreground/60 transition-all outline-none select-none group-data-horizontal/tabs:h-full group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:py-2 hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "relative inline-flex flex-1 shrink-0 items-center justify-center gap-2 rounded-full border border-transparent bg-clip-padding px-4 text-sm font-medium whitespace-nowrap text-foreground/60 transition-all outline-none select-none group-data-horizontal/tabs:h-full group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:py-2 hover:text-foreground focus-visible:outline-none focus-visible:ring-0 disabled:pointer-events-none disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         "data-active:text-foreground dark:data-active:text-foreground",
         "group-data-[variant=default]/tabs-list:not-data-active:hover:bg-tabs-hover",
         "group-data-[variant=line]/tabs-list:rounded-lg group-data-[variant=line]/tabs-list:not-data-active:hover:bg-tabs-hover",

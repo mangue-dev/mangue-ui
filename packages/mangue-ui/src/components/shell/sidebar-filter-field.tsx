@@ -91,7 +91,7 @@ export function SidebarFilterField({
         aria-label={placeholder}
         // `text-base` below md: under 16px, iOS zooms into the field on focus
         // and never zooms back out.
-        className="min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-muted-foreground md:text-sm"
+        className="h-11 min-w-0 flex-1 rounded-sm bg-transparent font-sans text-base outline-none placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-0 md:h-9 md:text-sm"
         onKeyDown={(e) => {
           if (e.key !== "Escape") return;
           // The key must not bubble: it would close the mobile sheet or the
@@ -110,7 +110,7 @@ export function SidebarFilterField({
           }}
           aria-label={clearLabel}
           title={clearLabel}
-          className="-mr-1 flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors outline-none hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/30"
+           className="-mr-1 flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors outline-none hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-0"
         >
           <X className="size-3.5" />
         </button>

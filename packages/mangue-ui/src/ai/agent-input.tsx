@@ -100,7 +100,7 @@ export function AgentInput({
           maxHeight={maxHeight}
           className={cn(
             "flex flex-col gap-0 overflow-hidden rounded-2xl border border-border bg-card p-0 shadow-sm transition-all",
-            "focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/10",
+            "focus-within:outline-none",
             className,
           )}
         >
@@ -110,7 +110,7 @@ export function AgentInput({
             placeholder={placeholder}
             // `text-foreground` overrides PromptInputTextarea's `text-primary`:
             // what you type is body copy, not a brand-colored accent.
-            className="min-h-[52px] px-4 pt-3 pb-1 text-sm leading-relaxed text-foreground"
+            className="min-h-[52px] px-4 pt-3 pb-1 font-sans text-base leading-relaxed text-foreground md:text-sm"
           />
 
           <PromptInputActions className="justify-between gap-2 px-2 pt-1 pb-2">

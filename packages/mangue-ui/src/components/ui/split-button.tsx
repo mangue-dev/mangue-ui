@@ -26,7 +26,7 @@ const TRIGGER_SIZE: Record<SplitButtonSize, "icon-sm" | "icon" | "icon-lg"> = {
  *  action doesn't get outlined on every edge — just the seam with the chevron. */
 const DIVIDER: Record<SplitButtonVariant, string> = {
   default: "border-r-primary-foreground/20",
-  destructive: "border-r-destructive/30",
+  destructive: "border-r-destructive-border",
   outline: "border-r-border",
   ghost: "border-r-border",
 }
@@ -101,7 +101,7 @@ export function SplitButton({
             disabled={disabled}
             aria-label={menuLabel}
             className={cn(
-              "rounded-l-none border-l-transparent",
+              "rounded-l-none border-l-0",
               triggerClassName
             )}
           >
