@@ -41,7 +41,7 @@ export function SendButtonWithCost({
             "bg-primary text-primary-foreground shadow-sm",
             "disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:shadow-none",
             "enabled:hover:bg-primary-hover",
-            showCost ? "gap-1 px-2.5" : "w-8",
+            showCost ? "gap-1 px-1.5 py-1.5" : "w-8 p-0",
           )}
         >
           {showCost ? (

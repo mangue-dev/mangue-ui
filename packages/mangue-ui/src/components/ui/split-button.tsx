@@ -14,11 +14,17 @@ import {
 type SplitButtonVariant = "default" | "outline" | "destructive"
 type SplitButtonSize = "sm" | "default" | "lg"
 
-/** The chevron trigger is a square icon-button matching the action's height. */
+/** The chevron trigger is a compact icon-button matching the action's height. */
 const TRIGGER_SIZE: Record<SplitButtonSize, "icon-sm" | "icon" | "icon-lg"> = {
   sm: "icon-sm",
   default: "icon",
   lg: "icon-lg",
+}
+
+const TRIGGER_WIDTH: Record<SplitButtonSize, "w-8" | "w-9" | "w-10"> = {
+  sm: "w-8",
+  default: "w-9",
+  lg: "w-10",
 }
 
 export interface SplitButtonProps
@@ -101,10 +107,11 @@ export function SplitButton({
             aria-label={menuLabel}
             className={cn(
               triggerClassName,
-              "rounded-none rounded-l-none rounded-r-full"
+              TRIGGER_WIDTH[size],
+              "px-0! rounded-none rounded-l-none rounded-r-full"
             )}
           >
-            <ChevronDown />
+            <ChevronDown className="-translate-x-px" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align={menuAlign} {...menuContentProps}>

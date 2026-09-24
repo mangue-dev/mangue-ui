@@ -198,6 +198,16 @@
   --color-surface-raised: var(--surface-raised);
   --color-surface-sunken: var(--surface-sunken);
   --color-surface-glass: var(--surface-glass);
+  --color-surface-brand: var(--surface-brand);
+  --color-surface-brand-hover: var(--surface-brand-hover);
+  --color-surface-info: var(--surface-info);
+  --color-surface-success: var(--surface-success);
+  --color-surface-warning: var(--surface-warning);
+  --color-surface-danger: var(--surface-danger);
+  --color-surface-type-video: var(--surface-type-video);
+  --color-surface-type-clip: var(--surface-type-clip);
+  --color-surface-type-screenshot: var(--surface-type-screenshot);
+  --color-surface-type-locked: var(--surface-type-locked);
   --color-border-subtle: var(--border-subtle);
   --color-accent-glow: var(--accent-glow);
   --color-accent-glow-foreground: var(--accent-glow-foreground);
@@ -305,6 +315,16 @@
   --surface-raised: oklch(0.995 0.002 266);
   --surface-sunken: oklch(0.940 0.008 268);
   --surface-glass: oklch(0.965 0.006 268 / 60%);
+  --surface-brand: oklch(0.920 0.044 265);
+  --surface-brand-hover: oklch(0.890 0.066 265);
+  --surface-info: oklch(0.950 0.022 265);
+  --surface-success: oklch(0.920 0.032 155);
+  --surface-warning: oklch(0.937 0.021 75);
+  --surface-danger: var(--destructive-surface);
+  --surface-type-video: oklch(0.930 0.030 303);
+  --surface-type-clip: oklch(0.930 0.030 163);
+  --surface-type-screenshot: oklch(0.930 0.030 230);
+  --surface-type-locked: oklch(0.930 0.030 55);
   --border-subtle: oklch(0.910 0.010 268);
   --accent-glow: oklch(0.62 0.22 265);
   --accent-glow-foreground: oklch(1 0 0);
@@ -383,6 +403,16 @@
   --surface-raised: oklch(0.170 0.003 250);
   --surface-sunken: oklch(0.090 0.003 250);
   --surface-glass: oklch(0.170 0.003 250 / 60%);
+  --surface-brand: oklch(0.230 0.044 265);
+  --surface-brand-hover: oklch(0.270 0.066 265);
+  --surface-info: oklch(0.210 0.033 265);
+  --surface-success: oklch(0.210 0.032 155);
+  --surface-warning: oklch(0.240 0.028 75);
+  --surface-danger: var(--destructive-surface);
+  --surface-type-video: oklch(0.230 0.030 303);
+  --surface-type-clip: oklch(0.230 0.030 163);
+  --surface-type-screenshot: oklch(0.230 0.030 230);
+  --surface-type-locked: oklch(0.230 0.030 55);
   --border-subtle: oklch(1 0 0 / 5%);
   --accent-glow: oklch(0.58 0.22 265);
   --accent-glow-foreground: oklch(1 0 0);
@@ -413,6 +443,15 @@
     --destructive-border: color-mix(in oklab, var(--destructive) 30%, var(--background));
     --destructive-border-hover: color-mix(in oklab, var(--destructive) 40%, var(--background));
     --tabs-hover: color-mix(in oklab, var(--foreground) 5%, var(--muted));
+    --surface-brand: color-mix(in oklab, var(--brand) 20%, var(--background));
+    --surface-brand-hover: color-mix(in oklab, var(--brand) 30%, var(--background));
+    --surface-info: color-mix(in oklab, var(--brand) 10%, var(--background));
+    --surface-success: color-mix(in oklab, var(--success) 10%, var(--background));
+    --surface-warning: color-mix(in oklab, var(--warning) 15%, var(--background));
+    --surface-type-video: color-mix(in oklab, oklch(0.62 0.21 303) 10%, var(--background));
+    --surface-type-clip: color-mix(in oklab, oklch(0.62 0.17 163) 10%, var(--background));
+    --surface-type-screenshot: color-mix(in oklab, oklch(0.62 0.16 230) 10%, var(--background));
+    --surface-type-locked: color-mix(in oklab, oklch(0.66 0.17 55) 10%, var(--background));
   }
 
   .dark {
@@ -423,6 +462,15 @@
     --destructive-border: color-mix(in oklab, var(--destructive) 40%, var(--background));
     --destructive-border-hover: color-mix(in oklab, var(--destructive) 50%, var(--background));
     --tabs-hover: color-mix(in oklab, var(--foreground) 5%, var(--muted));
+    --surface-brand: color-mix(in oklab, var(--brand) 20%, var(--background));
+    --surface-brand-hover: color-mix(in oklab, var(--brand) 30%, var(--background));
+    --surface-info: color-mix(in oklab, var(--brand) 20%, var(--background));
+    --surface-success: color-mix(in oklab, var(--success) 20%, var(--background));
+    --surface-warning: color-mix(in oklab, var(--warning) 25%, var(--background));
+    --surface-type-video: color-mix(in oklab, oklch(0.68 0.19 303) 20%, var(--background));
+    --surface-type-clip: color-mix(in oklab, oklch(0.68 0.15 163) 20%, var(--background));
+    --surface-type-screenshot: color-mix(in oklab, oklch(0.68 0.14 230) 20%, var(--background));
+    --surface-type-locked: color-mix(in oklab, oklch(0.72 0.15 55) 20%, var(--background));
   }
 }
 

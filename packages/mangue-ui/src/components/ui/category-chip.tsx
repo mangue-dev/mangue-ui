@@ -30,7 +30,7 @@ export function CategoryChip({
   return (
     <span
       className={cn(
-        "inline-flex max-w-full items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs",
+        "inline-flex max-w-full items-center gap-1 rounded-full border border-border px-1 py-0.5 text-xs",
         className,
       )}
     >

@@ -9,22 +9,22 @@ const KIND_STYLES: Record<TypeBadgeKind, { Icon: React.ComponentType<{ className
   video: {
     Icon: Clapperboard,
     classes:
-      "bg-violet-500/10 text-violet-600 dark:text-violet-400",
+      "bg-surface-type-video text-violet-600 dark:text-violet-400",
   },
   clip: {
     Icon: Scissors,
     classes:
-      "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+      "bg-surface-type-clip text-emerald-600 dark:text-emerald-400",
   },
   screenshot: {
     Icon: Camera,
     classes:
-      "bg-sky-500/10 text-sky-600 dark:text-sky-400",
+      "bg-surface-type-screenshot text-sky-600 dark:text-sky-400",
   },
   locked: {
     Icon: Lock,
     classes:
-      "bg-orange-500/10 text-orange-600 dark:text-orange-400",
+      "bg-surface-type-locked text-orange-600 dark:text-orange-400",
   },
 }
 
@@ -48,7 +48,7 @@ export function TypeBadge({
       data-slot="type-badge"
       data-kind={kind}
       className={cn(
-        "inline-flex h-7 shrink-0 items-center gap-1 rounded-full px-3 text-xs font-semibold leading-none",
+        "inline-flex h-7 shrink-0 items-center gap-1 rounded-full px-2 py-1.5 text-xs font-semibold leading-none",
         classes,
         className
       )}
