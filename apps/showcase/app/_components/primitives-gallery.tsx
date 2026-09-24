@@ -1615,7 +1615,7 @@ function AlertDemo() {
           <AlertDescription>
             {variant === "destructive"
               ? "Update your payment method to continue."
-              : "mangue-ui 0.7.0 is ready to install."}
+              : "mangue-ui 0.8.0 is ready to install."}
           </AlertDescription>
         </Alert>
       </Preview>
@@ -2330,7 +2330,7 @@ export function PrimitivesGallery({
               Component workbench
             </Badge>
             <StatusChip tone="success" icon={<Circle />}>
-              v0.7.0
+              v0.8.0
             </StatusChip>
           </div>
           <div className="mt-6 grid items-end gap-8 lg:grid-cols-[minmax(0,1fr)_auto]">
