@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "loading-dev": "^0.3.4",
     "lucide-react": "^0.575.0",
     "mangue-ui": "*",
     "next": "^16.2.6",

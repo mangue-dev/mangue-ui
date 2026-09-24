@@ -1,298 +1,252 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import {
-  Inbox,
-  CircleDot,
-  LayoutGrid,
-  GitBranch,
-  Palette,
-  Box,
-  Globe,
-  Settings,
-  Users,
-  Bell,
+  Activity,
+  Bot,
+  FormInput,
+  LayoutPanelTop,
+  Layers3,
   Moon,
-  Sun,
+  MousePointerClick,
+  Palette,
+  PanelsTopLeft,
   Sparkles,
-  Plus,
-  LogOut,
-  UserRound,
-  X,
-  Trash2,
-  Megaphone,
-  ArrowUpRight,
+  Sun,
 } from "lucide-react";
 
 import {
   AppShell,
+  Button,
+  CommandMenu,
+  Header,
+  MobileNav,
+  SearchCommand,
   Sidebar,
   SidebarFooterRow,
-  SecondarySidebarProvider,
-  useSidebarState,
-  Header,
-  SearchCommand,
-  MobileNav,
-  CommandMenu,
   useCommandMenu,
-  NumoChat,
   useTheme,
-  Button,
-  Avatar,
-  AvatarFallback,
-  Badge,
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  toast,
   type NavSection,
-  type NavItem,
-  type ChatMessage,
 } from "mangue-ui";
 
-import { AiGallery } from "./_components/ai-gallery";
-import { InboxGallery } from "./_components/inbox-gallery";
-import { PrimitivesGallery } from "./_components/primitives-gallery";
-import { SettingsGallery } from "./_components/settings-gallery";
+import {
+  AccentPicker,
+  DEFAULT_ACCENT,
+  PrimitivesGallery,
+  SHOWCASE_FAMILIES,
+  type ShowcaseFamilyId,
+} from "./_components/primitives-gallery";
 
-/** Nav keys that count as "inside a project" — drives the sidebar mode swap. */
-const PROJECT_KEYS = new Set(["mobile", "website", "design"]);
+const ACCENT_STORAGE_KEY = "mangue-ui-showcase-accent";
 
-/**
- * The two keys whose screen mounts a SECONDARY SIDEBAR. Nothing here wires that
- * up: the screen mounts a `<SecondarySidebar>`, the provider counts it, the
- * primary sidebar rails itself and the chrome opens the gutter.
- */
-const SECONDARY_KEYS = new Set(["inbox", "settings"]);
+const FAMILY_ICONS = {
+  actions: MousePointerClick,
+  forms: FormInput,
+  navigation: PanelsTopLeft,
+  overlays: Layers3,
+  feedback: Activity,
+  display: LayoutPanelTop,
+  ai: Bot,
+} satisfies Record<ShowcaseFamilyId, React.ComponentType<{ className?: string }>>;
 
-export default function Home() {
-  // Everything about the double sidebar hangs off this provider: it is the
-  // thread between a page's column and the place the chrome keeps for it.
-  return (
-    <SecondarySidebarProvider>
-      <Showcase />
-    </SecondarySidebarProvider>
-  );
+function normalizeHex(value: string) {
+  return /^#[0-9a-f]{6}$/i.test(value) ? value.toUpperCase() : null;
 }
 
-function Showcase() {
+function readableForeground(hex: string) {
+  const value = Number.parseInt(hex.slice(1), 16);
+  const channels = [(value >> 16) & 255, (value >> 8) & 255, value & 255].map(
+    (channel) => {
+      const normalized = channel / 255;
+      return normalized <= 0.03928
+        ? normalized / 12.92
+        : ((normalized + 0.055) / 1.055) ** 2.4;
+    },
+  );
+  const luminance =
+    channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
+  const contrastAgainstWhite = 1.05 / (luminance + 0.05);
+  const contrastAgainstBlack = (luminance + 0.05) / 0.05;
+  return contrastAgainstBlack > contrastAgainstWhite ? "#0A0A0A" : "#FFFFFF";
+}
+
+export default function Home() {
   const { open, setOpen } = useCommandMenu();
   const { resolvedTheme, toggleTheme } = useTheme();
-  const [activeKey, setActiveKey] = React.useState("primitives");
+  const [activeKey, setActiveKey] = React.useState("overview");
+  const [focusRequest, setFocusRequest] = React.useState(0);
+  const [accent, setAccent] = React.useState(DEFAULT_ACCENT);
 
-  // Holding ⌘ arms the chord: every nav row with a `shortcut` shows its key.
-  const [chordArmed, setChordArmed] = React.useState(false);
   React.useEffect(() => {
-    const arm = (e: KeyboardEvent) => setChordArmed(e.metaKey);
-    window.addEventListener("keydown", arm);
-    window.addEventListener("keyup", arm);
-    window.addEventListener("blur", () => setChordArmed(false));
-    return () => {
-      window.removeEventListener("keydown", arm);
-      window.removeEventListener("keyup", arm);
-    };
+    try {
+      const stored = window.localStorage.getItem(ACCENT_STORAGE_KEY);
+      const normalized = stored ? normalizeHex(stored) : null;
+      if (normalized) setAccent(normalized);
+    } catch {
+      setAccent(DEFAULT_ACCENT);
+    }
   }, []);
-  const [chatOpen, setChatOpen] = React.useState(false);
-  const [messages, setMessages] = React.useState<ChatMessage[]>([
-    {
-      id: "seed",
-      role: "assistant",
-      content: "Hi! I'm Numo. Ask me anything about this component library.",
-    },
-  ]);
-  const [streaming, setStreaming] = React.useState(false);
 
-  const handleSend = (text: string) => {
-    setMessages((prev) => [...prev, { id: `u-${prev.length}`, role: "user", content: text }]);
-    setStreaming(true);
-    window.setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: `a-${prev.length}`,
-          role: "assistant",
-          content: "This panel is fully presentational — wire onSend to your model and it comes alive.",
-        },
-      ]);
-      setStreaming(false);
-    }, 900);
-  };
+  React.useEffect(() => {
+    const normalized = normalizeHex(accent) ?? DEFAULT_ACCENT;
+    const foreground = readableForeground(normalized);
+    const root = document.documentElement.style;
+    root.setProperty("--primary", normalized);
+    root.setProperty("--primary-foreground", foreground);
+    root.setProperty("--sidebar-primary", normalized);
+    root.setProperty("--sidebar-primary-foreground", foreground);
+    root.setProperty("--brand", normalized);
+    root.setProperty("--brand-foreground", foreground);
+    root.setProperty("--accent-glow", normalized);
+    root.setProperty("--accent-glow-foreground", foreground);
+    root.setProperty(
+      "--accent-glow-muted",
+      `color-mix(in oklab, ${normalized} 14%, transparent)`,
+    );
+    root.setProperty("--ring", normalized);
+    root.setProperty("--sidebar-ring", normalized);
+    root.setProperty("--chart-4", normalized);
+  }, [accent]);
 
-  // A gallery anchor: come back to the stacked galleries, then scroll to it.
-  // The shell owns every scroll (its <main> is the scroller), so we move that
-  // one by hand — `scrollIntoView` would walk up past it and scroll the header
-  // out of the window too.
-  const goToGallery = React.useCallback((key: string) => {
-    setActiveKey(key);
+  const updateAccent = React.useCallback((value: string) => {
+    const normalized = normalizeHex(value);
+    if (!normalized) return;
+    setAccent(normalized);
+    try {
+      window.localStorage.setItem(ACCENT_STORAGE_KEY, normalized);
+    } catch {}
+  }, []);
+
+  const resetAccent = React.useCallback(() => {
+    setAccent(DEFAULT_ACCENT);
+    try {
+      window.localStorage.setItem(ACCENT_STORAGE_KEY, DEFAULT_ACCENT);
+    } catch {}
+  }, []);
+
+  const scrollToId = React.useCallback((id: string) => {
+    setActiveKey(id);
+    setFocusRequest((request) => request + 1);
     requestAnimationFrame(() => {
-      const el = document.getElementById(key);
-      const main = el?.closest("main");
-      if (!el || !main) return;
-      const top =
-        main.scrollTop +
-        el.getBoundingClientRect().top -
-        main.getBoundingClientRect().top;
-      main.scrollTo({ top, behavior: "smooth" });
+      requestAnimationFrame(() => {
+        const element = document.getElementById(id);
+        const main = element?.closest("main");
+        if (!element || !main) return;
+        const toolbar = document.querySelector<HTMLElement>(
+          "[data-showcase-toolbar]",
+        );
+        const top =
+          main.scrollTop +
+          element.getBoundingClientRect().top -
+          main.getBoundingClientRect().top -
+          (toolbar?.getBoundingClientRect().height ?? 0) -
+          16;
+        main.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+      });
     });
   }, []);
 
   const navSections = React.useMemo<NavSection[]>(
     () => [
       {
-        label: "Workspace",
+        label: "Workbench",
         items: [
           {
-            key: "inbox",
-            label: "Inbox",
-            icon: Inbox,
-            onClick: () => setActiveKey("inbox"),
-            badge: <CountBadge value={8} />,
-          },
-          { key: "my-issues", label: "My Issues", icon: CircleDot, href: "#my-issues" },
-          { key: "views", label: "Views", icon: LayoutGrid, href: "#views" },
-          { key: "cycles", label: "Cycles", icon: GitBranch, href: "#cycles" },
-        ],
-      },
-      {
-        label: "Projects",
-        items: [
-          { key: "mobile", label: "Mobile App", icon: Box, href: "#mobile" },
-          { key: "website", label: "Website", icon: Globe, href: "#website" },
-          { key: "design", label: "Design System", icon: Palette, href: "#design", badge: <Dot /> },
-        ],
-      },
-      {
-        label: "Galleries",
-        items: [
-          {
-            key: "primitives",
-            label: "Primitives",
-            icon: Palette,
-            onClick: () => goToGallery("primitives"),
-          },
-          {
-            key: "ai",
-            label: "AI",
+            key: "overview",
+            label: "Overview",
             icon: Sparkles,
-            onClick: () => goToGallery("ai"),
-            shortcut: "A",
-            badge: <Badge variant="secondary">new</Badge>,
+            onClick: () => scrollToId("overview"),
           },
         ],
       },
       {
-        label: "General",
-        items: [
-          { key: "members", label: "Members", icon: Users, href: "#members" },
-          {
-            key: "settings",
-            label: "Settings",
-            icon: Settings,
-            onClick: () => setActiveKey("settings"),
-          },
-        ],
+        label: "Component families",
+        items: SHOWCASE_FAMILIES.map((family) => ({
+          key: family.id,
+          label: family.label,
+          icon: FAMILY_ICONS[family.id],
+          onClick: () => scrollToId(family.id),
+        })),
       },
     ],
-    [goToGallery],
+    [scrollToId],
   );
 
-  const commandGroups = [
-    {
-      heading: "Navigation",
-      items: navSections.flatMap((section) =>
-        section.items.map((item) => ({
-          key: item.key,
-          label: item.label,
-          icon: item.icon,
-          onSelect: () => setActiveKey(item.key),
-        })),
-      ),
-    },
-    {
-      heading: "Actions",
-      items: [
-        { key: "new-issue", label: "New issue", icon: Plus, shortcut: "C", onSelect: () => toast("New issue") },
-        { key: "invite", label: "Invite member", icon: Users, onSelect: () => toast("Invite sent") },
-        {
-          key: "theme",
-          label: `Switch to ${resolvedTheme === "dark" ? "light" : "dark"} theme`,
-          icon: resolvedTheme === "dark" ? Sun : Moon,
-          onSelect: toggleTheme,
-        },
-      ],
-    },
-  ];
-
-  const activeItem = navSections.flatMap((s) => s.items).find((i) => i.key === activeKey);
-  const activeLabel = activeItem?.label ?? "Inbox";
-  const secondaryScreen = SECONDARY_KEYS.has(activeKey);
+  const commandGroups = React.useMemo(
+    () => [
+      {
+        heading: "Component workbench",
+        items: navSections.flatMap((section) =>
+          section.items.map((item) => ({
+            key: item.key,
+            label: item.label,
+            icon: item.icon,
+            onSelect: item.onClick,
+          })),
+        ),
+      },
+    ],
+    [navSections],
+  );
 
   return (
     <AppShell
+      secondarySidebar={false}
       sidebar={
         <Sidebar
           sections={navSections}
           activeKey={activeKey}
-          linkComponent={Link}
           header={<Brand />}
-          // What the rail shows in the brand's place; the two cross-fade as the
-          // bar unfolds.
-          collapsedBrand={<BrandMark />}
-          // No `overlay` prop: the bar follows the provider above it. Open Inbox
-          // or Settings and it rails itself, unfolding over the second column on
-          // hover without shifting anything.
-          //
-          // Changing this replays the nav's animated swap. Here it flips when
-          // you enter the "Projects" area, so the demo shows the effect.
-          modeKey={PROJECT_KEYS.has(activeKey) ? "project" : "root"}
-          modeDirection={PROJECT_KEYS.has(activeKey) ? "forward" : "backward"}
-          // Hold ⌘ to arm the chord: rows with a `shortcut` surface their key.
-          chordArmed={chordArmed}
-          chordPrefix="⌘"
-          onItemHover={(item) => {
-            // The warm-up hook: where an app prefetches the page's caches.
-            if (process.env.NODE_ENV === "development") {
-              console.debug("prefetch", item.key);
-            }
-          }}
+          modeKey="component-workbench"
           footer={
             <div className="flex flex-col gap-0.5">
-              {/* No `collapsed` prop: footer rows read the bar's state from
-                  context, so they follow the rail on their own. */}
-              <SidebarFooterRow icon={Trash2} label="Trash" onClick={() => toast("Trash")} />
               <SidebarFooterRow
-                icon={Megaphone}
-                label="Share feedback"
-                trailingIcon={ArrowUpRight}
-                onClick={() => toast("Feedback")}
+                icon={resolvedTheme === "dark" ? Sun : Moon}
+                label={resolvedTheme === "dark" ? "Light theme" : "Dark theme"}
+                onClick={toggleTheme}
               />
-              <UserMenu />
+              <SidebarFooterRow
+                icon={Palette}
+                label="Reset accent"
+                onClick={resetAccent}
+              />
             </div>
           }
         />
       }
       header={
         <Header
-          linkComponent={Link}
           breadcrumb={[
-            { key: "workspace", label: "Workspace", onClick: () => setActiveKey("primitives") },
-            { key: activeKey, label: activeLabel, icon: activeItem?.icon },
+            {
+              key: "mangue-ui",
+              label: "mangue-ui",
+              icon: Sparkles,
+              onClick: () => scrollToId("overview"),
+            },
+            {
+              key: "workbench",
+              label: "Component workbench",
+              icon: LayoutPanelTop,
+            },
           ]}
           right={
             <>
-              <SearchCommand groups={commandGroups} placeholder="Search or jump to..." />
-              <Button variant="ghost" size="icon-sm" aria-label="Toggle theme" onClick={toggleTheme}>
+              <SearchCommand
+                groups={commandGroups}
+                placeholder="Jump to a family…"
+              />
+              <AccentPicker
+                accent={accent}
+                onAccentChange={updateAccent}
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                aria-label="Toggle theme"
+                onClick={toggleTheme}
+              >
                 {resolvedTheme === "dark" ? <Sun /> : <Moon />}
-              </Button>
-              <Button variant="ghost" size="icon-sm" aria-label="Notifications">
-                <Bell />
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => setChatOpen((v) => !v)}>
-                <Sparkles /> Numo
               </Button>
             </>
           }
@@ -303,134 +257,65 @@ function Showcase() {
           sections={navSections}
           commandGroups={commandGroups}
           activeKey={activeKey}
-          linkComponent={Link}
           menuHeader={<Brand />}
-          menuFooter={<UserMenu />}
-          searchPlaceholder="Search or jump to..."
+          searchPlaceholder="Jump to a family…"
+          actions={
+            <>
+              <AccentPicker
+                accent={accent}
+                onAccentChange={updateAccent}
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                aria-label="Toggle theme"
+                onClick={toggleTheme}
+              >
+                {resolvedTheme === "dark" ? <Sun /> : <Moon />}
+              </Button>
+            </>
+          }
         />
       }
     >
-      {/* The two screens with a second navigation level take the whole shell:
-          their column is teleported next to the primary sidebar, and what is
-          left here is the detail. */}
-      {activeKey === "inbox" ? (
-        <InboxGallery />
-      ) : activeKey === "settings" ? (
-        <SettingsGallery />
-      ) : (
-        <>
-          <div id="primitives">
-            <PrimitivesGallery />
-          </div>
-          <div id="ai">
-            <AiGallery />
-          </div>
-        </>
-      )}
-
-      <CommandMenu open={open} onOpenChange={setOpen} groups={commandGroups} />
-
-      {/* Floating assistant panel (Numo) — stays out of the way of a screen that
-          already has two navigation columns. */}
-      {chatOpen && !secondaryScreen ? (
-        <div className="fixed right-4 bottom-4 z-40 hidden h-[70vh] max-h-[640px] w-[380px] desktop:block">
-          <div className="relative h-full">
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              className="absolute -top-2 -right-2 z-10 rounded-full bg-card shadow"
-              aria-label="Close assistant"
-              onClick={() => setChatOpen(false)}
-            >
-              <X />
-            </Button>
-            <NumoChat
-              messages={messages}
-              onSend={handleSend}
-              isStreaming={streaming}
-              suggestions={[
-                { key: "s1", label: "What primitives are included?", onSelect: () => handleSend("What primitives are included?") },
-                { key: "s2", label: "How do I rebrand?", onSelect: () => handleSend("How do I rebrand?") },
-              ]}
-            />
-          </div>
-        </div>
-      ) : null}
+      <PrimitivesGallery
+        accent={accent}
+        activeKey={activeKey}
+        focusRequest={focusRequest}
+        onActiveChange={setActiveKey}
+        onAccentChange={updateAccent}
+      />
+      <CommandMenu
+        open={open}
+        onOpenChange={setOpen}
+        groups={commandGroups}
+        placeholder="Jump to a component family…"
+      />
     </AppShell>
   );
 }
 
 function Brand() {
   return (
-    <div className="flex items-center gap-2">
-      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-        <span className="text-sm font-bold">m</span>
+    <div className="flex items-center gap-2.5">
+      <BrandMark />
+      <div className="min-w-0">
+        <div className="truncate text-sm font-semibold tracking-tight text-foreground">
+          mangue-ui
+        </div>
+        <div className="code-font text-2xs uppercase tracking-[0.12em] text-muted-foreground">
+          Workbench
+        </div>
       </div>
-      <span className="text-[15px] font-semibold tracking-tight">mangue-ui</span>
     </div>
   );
 }
 
-/** The bare mark, for the collapsed sidebar's cross-fading square. */
 function BrandMark() {
   return (
-    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-      <span className="text-sm font-bold">m</span>
+    <div className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm shadow-primary/15">
+      <span className="font-display text-sm font-bold">m</span>
     </div>
   );
-}
-
-function UserMenu() {
-  // Reads the bar it sits in: folded or not, and — in rail mode — whether one of
-  // its own menus is open. A dropdown opens in a portal, OUTSIDE the bar, so
-  // moving into it would count as leaving and fold the rail under the menu.
-  const { collapsed, setMenuOpen } = useSidebarState();
-  return (
-    <DropdownMenu onOpenChange={setMenuOpen}>
-      <DropdownMenuTrigger asChild>
-        <button
-          className={
-            "flex items-center rounded-lg text-left transition-colors hover:bg-sidebar-accent " +
-            (collapsed ? "w-9 justify-center p-1" : "w-full gap-2 p-1.5")
-          }
-        >
-          <Avatar className="h-7 w-7">
-            <AvatarFallback>CG</AvatarFallback>
-          </Avatar>
-          {!collapsed && (
-            <div className="min-w-0 flex-1">
-              <div className="truncate text-sm font-medium">Clément</div>
-              <div className="truncate text-xs text-muted-foreground">clement@mangue.dev</div>
-            </div>
-          )}
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-56">
-        <DropdownMenuLabel>My account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <UserRound /> Profile
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Settings /> Settings
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <LogOut /> Sign out
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
-
-function CountBadge({ value }: { value: number }) {
-  return (
-    <Badge variant="secondary" className="min-w-7 justify-center px-1.5">
-      {value}
-    </Badge>
-  );
-}
-
-function Dot() {
-  return <span className="h-1.5 w-1.5 rounded-full bg-primary" />;
 }

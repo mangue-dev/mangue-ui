@@ -9,7 +9,6 @@ const TRACK_WIDTH = 34
 const TRACK_HEIGHT = 20
 const THUMB_SIZE = 16
 const THUMB_OFFSET = 2
-const THUMB_TRAVEL = TRACK_WIDTH - THUMB_SIZE - THUMB_OFFSET * 2
 const PILL_EXTEND = 2
 const PRESS_EXTEND = 4
 const PRESS_SHRINK = 4
@@ -32,8 +31,8 @@ function getThumbPosition(
       : THUMB_SIZE
   const thumbHeight = pressed ? THUMB_SIZE - PRESS_SHRINK : THUMB_SIZE
   const centerX = isChecked
-    ? THUMB_OFFSET + THUMB_TRAVEL + THUMB_SIZE / 2
-    : THUMB_OFFSET + THUMB_SIZE / 2
+    ? TRACK_WIDTH - THUMB_OFFSET - thumbWidth / 2
+    : THUMB_OFFSET + thumbWidth / 2
 
   return {
     x: centerX - thumbWidth / 2,
