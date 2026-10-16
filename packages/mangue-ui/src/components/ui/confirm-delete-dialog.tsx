@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Loader2 } from "lucide-react"
+import { Spinner } from "./spinner"
 
 import {
   AlertDialog,
@@ -78,7 +78,7 @@ export function ConfirmDeleteDialog({
             onClick={handleConfirm}
             disabled={isLoading}
           >
-            {isLoading && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+            {isLoading && <Spinner className="h-3.5 w-3.5 animate-spin" />}
             {confirmLabel}
           </AlertDialogAction>
         </AlertDialogFooter>

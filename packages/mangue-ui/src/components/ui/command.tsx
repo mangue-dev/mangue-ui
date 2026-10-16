@@ -15,7 +15,9 @@ import {
   InputGroup,
   InputGroupAddon,
 } from "./input-group"
-import { SearchIcon, CheckIcon } from "lucide-react"
+import { SearchIcon } from "lucide-react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { CheckIcon } from "@hugeicons/core-free-icons"
 
 function Command({
   className,
@@ -169,7 +171,7 @@ function CommandItem({
       {children}
       {/* Keep unchecked indicators out of the flex layout: consumers may provide
           their own trailing content or selection indicator. */}
-      <CheckIcon className="ml-auto hidden group-data-[checked=true]/command-item:block group-has-data-[slot=command-shortcut]/command-item:hidden" />
+      <HugeiconsIcon icon={CheckIcon} className="ml-auto hidden group-data-[checked=true]/command-item:block group-has-data-[slot=command-shortcut]/command-item:hidden" />
     </CommandPrimitive.Item>
   )
 }

@@ -5,7 +5,9 @@ import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui"
 
 import { cn } from "../../lib/utils"
 import { useMediaQuery } from "../../lib/hooks/use-mobile"
-import { CheckIcon, ChevronRightIcon } from "lucide-react"
+import { ChevronRightIcon } from "lucide-react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { CheckIcon } from "@hugeicons/core-free-icons"
 
 // Below 768px, side-opening flyout submenus can't fit on narrow screens (Radix
 // only flips them left/right and can't shift them horizontally to overlap the
@@ -132,8 +134,7 @@ function DropdownMenuCheckboxItem({
         data-slot="dropdown-menu-checkbox-item-indicator"
       >
         <DropdownMenuPrimitive.ItemIndicator>
-          <CheckIcon
-          />
+          <HugeiconsIcon icon={CheckIcon} />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
       {children}
@@ -175,8 +176,7 @@ function DropdownMenuRadioItem({
         data-slot="dropdown-menu-radio-item-indicator"
       >
         <DropdownMenuPrimitive.ItemIndicator>
-          <CheckIcon
-          />
+          <HugeiconsIcon icon={CheckIcon} />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
       {children}
