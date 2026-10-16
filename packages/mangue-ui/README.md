@@ -12,11 +12,30 @@ it and Tailwind scans it, so you keep full control over the design tokens.
 ## Install
 
 ```bash
-npm install mangue-ui
+npm install mangue-ui framer-motion sonner cmdk @lobehub/icons @hugeicons/react @hugeicons/core-free-icons
 ```
 
 Requires **React 18/19** and **Tailwind CSS v4** in the host app. `next` is an
 optional peer.
+
+Libraries that a host app also uses directly are **peer dependencies**, so the
+app and mangue-ui share one copy: `framer-motion` (12–14; two copies would
+break `AnimatePresence` and the exported `transitions` types), `sonner` (one
+toast store), `cmdk`, `@lobehub/icons` (5 or 6) and the Hugeicons packages
+(checkmarks and the spinner). Everything else stays an internal dependency.
+
+`@lobehub/icons` is only used through its per-logo files, which need React
+alone. Its declared `@lobehub/ui` (and, in 5.x, `antd`) peers are only used by
+its barrel; with pnpm you can mark them optional rather than install them:
+
+```yaml
+# pnpm-workspace.yaml
+packageExtensions:
+  "@lobehub/icons":
+    peerDependenciesMeta:
+      "@lobehub/ui": { optional: true }
+      antd: { optional: true }
+```
 
 ## Setup (Next.js)
 

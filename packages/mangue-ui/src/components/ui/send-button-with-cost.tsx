@@ -1,6 +1,7 @@
 "use client";
 
-import { ArrowUp, Coins, Loader2 } from "lucide-react";
+import { ArrowUp, Coins } from "lucide-react";
+import { Spinner } from "./spinner";
 import { cn } from "../../lib/utils";
 import {
   Tooltip,
@@ -54,7 +55,7 @@ export function SendButtonWithCost({
             </>
           ) : null}
           {isLoading ? (
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            <Spinner className="h-3.5 w-3.5 animate-spin" />
           ) : (
             <ArrowUp className="h-3.5 w-3.5" />
           )}

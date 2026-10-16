@@ -1,7 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { CheckIcon } from "@hugeicons/core-free-icons";
 
 import { commandFilter } from "../../lib/command-filter";
 import { cn } from "../../lib/utils";
@@ -208,7 +210,7 @@ export function Combobox({
         <span className="min-w-0 flex-1 truncate">{opt.label}</span>
       )}
       {opt.trailing}
-      <Check
+      <HugeiconsIcon icon={CheckIcon}
         className={cn(
           "size-4 shrink-0",
           opt.description && "mt-0.5",
@@ -320,7 +322,7 @@ export function Combobox({
                 <span className="min-w-0 flex-1 truncate">
                   {freeTextLabel(trimmed)}
                 </span>
-                <Check
+                <HugeiconsIcon icon={CheckIcon}
                   className={cn(
                     "size-4 shrink-0",
                     value === trimmed ? "opacity-100" : "opacity-0",

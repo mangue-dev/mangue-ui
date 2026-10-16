@@ -1,21 +1,19 @@
 "use client";
 
 import type { ComponentType } from "react";
-import {
-  Claude,
-  Cohere,
-  DeepSeek,
-  Gemini,
-  Grok,
-  Meta,
-  Mistral,
-  Moonshot,
-  OpenAI,
-  OpenRouter,
-  Perplexity,
-  Qwen,
-  Zhipu,
-} from "@lobehub/icons";
+import ClaudeColor from "@lobehub/icons/es/Claude/components/Color";
+import CohereColor from "@lobehub/icons/es/Cohere/components/Color";
+import DeepSeekColor from "@lobehub/icons/es/DeepSeek/components/Color";
+import GeminiColor from "@lobehub/icons/es/Gemini/components/Color";
+import Grok from "@lobehub/icons/es/Grok/components/Mono";
+import MetaColor from "@lobehub/icons/es/Meta/components/Color";
+import MistralColor from "@lobehub/icons/es/Mistral/components/Color";
+import Moonshot from "@lobehub/icons/es/Moonshot/components/Mono";
+import OpenAI from "@lobehub/icons/es/OpenAI/components/Mono";
+import OpenRouter from "@lobehub/icons/es/OpenRouter/components/Mono";
+import PerplexityColor from "@lobehub/icons/es/Perplexity/components/Color";
+import QwenColor from "@lobehub/icons/es/Qwen/components/Color";
+import ZhipuColor from "@lobehub/icons/es/Zhipu/components/Color";
 import { Cpu } from "lucide-react";
 
 import { cn } from "../lib/utils";
@@ -24,9 +22,10 @@ import { providerFromModel } from "./model-format";
 /**
  * The provider's real color logo, derived from a model id (`provider/model`)
  * through `@lobehub/icons`. Shared by `ModelBadge` (displaying a run) and
- * `ModelCombobox` (the searchable picker). Brands are imported one by one (the
- * barrel is `sideEffects:false`) so `ProviderIcon` / `@lobehub/ui` never get
- * pulled in. An unknown provider slug falls back to `Cpu`.
+ * `ModelCombobox` (the searchable picker). Each logo is imported from its own
+ * component file: those only need React, whereas the package barrel also
+ * re-exports `ProviderIcon` and friends, which depend on `@lobehub/ui` and
+ * antd. An unknown provider slug falls back to `Cpu`.
  */
 
 export type LogoComponent = ComponentType<{
@@ -36,19 +35,19 @@ export type LogoComponent = ComponentType<{
 
 /** provider slug (normalized by providerFromModel) → color logo component. */
 export const PROVIDER_LOGOS: Record<string, LogoComponent> = {
-  deepseek: DeepSeek.Color,
-  anthropic: Claude.Color,
+  deepseek: DeepSeekColor,
+  anthropic: ClaudeColor,
   openai: OpenAI,
-  google: Gemini.Color,
-  gemini: Gemini.Color,
-  meta: Meta.Color,
-  mistral: Mistral.Color,
-  qwen: Qwen.Color,
+  google: GeminiColor,
+  gemini: GeminiColor,
+  meta: MetaColor,
+  mistral: MistralColor,
+  qwen: QwenColor,
   xai: Grok,
   moonshot: Moonshot,
-  zhipu: Zhipu.Color,
-  cohere: Cohere.Color,
-  perplexity: Perplexity.Color,
+  zhipu: ZhipuColor,
+  cohere: CohereColor,
+  perplexity: PerplexityColor,
   openrouter: OpenRouter,
 };
 
